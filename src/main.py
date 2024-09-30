@@ -1,5 +1,9 @@
-import telebot
-import url_checker
+import asyncio
+
+import telebot, telebot.types as types
+
+from utils import url_checker
+from utils import scraper
 from settings import telegramKey
 
 
@@ -7,27 +11,23 @@ TELEGRAM_API_KEY = telegramKey.TELEGRAM_API_KEY
 bot = telebot.TeleBot(TELEGRAM_API_KEY, parse_mode=None)
 
 # Message handler to check if the message contains a URL
-@bot.message_handler(func=lambda message: url_checker.contains_url(message.text))
-def echo_all(message):
-    # TODO:
-    #   - Scrape the website (If is not a video from youtue)
-    #   - Implement the google Gemini API to summarize the content
-    #   - Return it to the user
+@bot.message_handler(func=lambda msg: url_checker.contains_url(msg.text))
+def echo_all(message: types.Message):
+    """
+    """
+    urls_content = []
+    urls = url_checker.extract_urls(message.text)
 
-    #? NOTE:
-    #      If the content is a tweet? or a video from youtube? 
-    #      or a twith with text and image/video?
+    for url in urls:
+        content = asyncio.run(scraper.scrape_website(url))
+        urls_content.append(content)
 
+    print(urls_content)
+    # bot.reply_to(
+    #     message,
+    #     "URL detected: " + urls_content,
+    #     disable_notification=True
+    #     )
 
-    # Disable notification to avoid spamming the users (because if you send 
-    # the message and the bot send the summary we have 2 notification and this 
-    # is redundant for the same message)
-    bot.reply_to(
-        message,
-        "URL detected: " + message.text,
-        disable_notification=True
-        )
-
-# NOTE: If there is proble with infinity polling, you can use:
-# bot.infinity_polling(timeout=10, long_polling_timeout = 5)
-bot.infinity_polling()
+if __name__ == "__main__":
+    bot.infinity_polling()
