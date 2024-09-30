@@ -1,11 +1,13 @@
 import telebot
 import url_checker
+from settings import telegramKey
 
 # Telegram api used:
 #   - pip3 install pyTelegramBotAPI
 #   - https://github.com/eternnoir/pyTelegramBotAPI
 
-bot = telebot.TeleBot("TOKEN", parse_mode=None)
+TELEGRAM_API_KEY = telegramKey.TELEGRAM_API_KEY
+bot = telebot.TeleBot(TELEGRAM_API_KEY, parse_mode=None)
 
 # Message handler to check if the message contains a URL
 @bot.message_handler(func=lambda message: url_checker.contains_url(message.text))
