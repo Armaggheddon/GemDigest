@@ -2,9 +2,6 @@ import telebot
 import url_checker
 from settings import telegramKey
 
-# Telegram api used:
-#   - pip3 install pyTelegramBotAPI
-#   - https://github.com/eternnoir/pyTelegramBotAPI
 
 TELEGRAM_API_KEY = telegramKey.TELEGRAM_API_KEY
 bot = telebot.TeleBot(TELEGRAM_API_KEY, parse_mode=None)
