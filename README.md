@@ -2,7 +2,9 @@
 GemDigest leverages the power of the Gemini API to summarize articles and PDFs, while collecting brief messages into personalized daily or weekly digests
 
 ### Build container
+```bash
 docker build -t gem_digest_bot .
+```
 
 ### Use as dev container
 ```bash
@@ -43,3 +45,6 @@ docker run --env-file gem_digest.env -d --name gem_digest_bot gem_digest_bot bas
 ### Crawler used:
     - pip3 install crawl4ai
     - https://github.com/unclecode/crawl4ai?tab=readme-ov-file
+
+### Gemini API used:
+    - pip3 install google-generativeai
