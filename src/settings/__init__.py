@@ -1,1 +1,1 @@
-from settings import telegramKey
+from settings import APIKeys

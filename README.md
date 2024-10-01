@@ -45,3 +45,6 @@ docker run --env-file gem_digest.env -d --name gem_digest_bot gem_digest_bot bas
 ### Crawler used:
     - pip3 install crawl4ai
     - https://github.com/unclecode/crawl4ai?tab=readme-ov-file
+
+### Gemini API used:
+    - pip3 install google-generativeai
