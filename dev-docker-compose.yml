@@ -1,0 +1,15 @@
+services:
+
+  bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gem_digest_dev
+    volumes:
+      - $PWD:/home/dev
+    env_file: 
+      - ./gem_digest.env
+    stdin_open: true # docker run -i
+    tty: true     # docker run -t
+    command: 
+      - /bin/bash
