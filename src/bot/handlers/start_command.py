@@ -16,7 +16,6 @@ class Messages(Enum):
         return self.value % kwargs
 
 
-
 async def handle_start_command(message: Message, bot: AsyncTeleBot):
     await bot.send_message(
         message.chat.id,
