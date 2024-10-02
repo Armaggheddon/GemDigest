@@ -165,4 +165,5 @@ cython_debug/
 telegramKey.py
 .devcontainer/
 dependabot.yml
+APIKeys.py
 api_keys.env

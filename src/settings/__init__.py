@@ -1,1 +1,1 @@
-from settings import APIKeys
+from .APIKeys import *
