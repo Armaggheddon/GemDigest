@@ -1,0 +1,1 @@
+from .gem_digest_bot import run

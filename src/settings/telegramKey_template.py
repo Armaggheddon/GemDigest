@@ -1,2 +1,0 @@
-
-TELEGRAM_API_KEY = "TOKEN"
