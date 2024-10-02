@@ -1,13 +1,11 @@
 import os
-import sys
 
 import google.generativeai as genai
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from settings import APIKeys
+import settings 
 
 
-GEMINI_API_KEY = APIKeys.GEMINI_API_KEY
+GEMINI_API_KEY = settings.GEMINI_API_KEY
 #? FIX THE PROBLEM WITH THE ENV VARIABLE:
 #? genai.configure(api_key=os.environ[GEMINI_API_KEY])
 genai.configure(api_key=GEMINI_API_KEY)
@@ -32,5 +30,5 @@ def generate_text(
     history=history
     )
 
-    response = chat_session.send_message(APIKeys.gemini_prompt_v1 + prompt)
+    response = chat_session.send_message(settings.gemini_prompt_v1 + prompt)
     return response.text
