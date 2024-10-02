@@ -1,1 +1,2 @@
-gem_digest.env
+configs.env
+configs.env.example

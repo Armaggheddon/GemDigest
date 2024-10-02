@@ -38,6 +38,11 @@ And re-run steps 1 and 2
 docker run --env-file gem_digest.env -d --name gem_digest_bot gem_digest_bot bash
 ```
 
+### Using API keys
+1. Copy `configs.env.example` to `configs.env`
+2. Update the `configs.env` with your own API keys
+3. Run the project with docker compose / docker
+
 ### Telegram api used:
     - pip3 install pyTelegramBotAPI
     - https://github.com/eternnoir/pyTelegramBotAPI
