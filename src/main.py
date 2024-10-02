@@ -3,15 +3,15 @@ import collections
 
 import telebot, telebot.types as types
 
+import settings
 from utils import url_checker
 from utils import scraper
-from settings import APIKeys
 from utils import google_gemini as gemini
 from utils import toolkit
 
 # TODO: Fix the prompt such that the output is whell formatted in html for telegram
 
-TELEGRAM_API_KEY = APIKeys.TELEGRAM_API_KEY
+TELEGRAM_API_KEY = settings.TELEGRAM_API_KEY
 bot = telebot.TeleBot(TELEGRAM_API_KEY, parse_mode=None)
 
 # Message handler to check if the message contains a URL
@@ -41,7 +41,8 @@ def echo_all(message: types.Message):
 
     for element in urls_content:
         prompt = element.content + "\n\n" + "\n".join(element.sub_urls)
-        output = gemini.generate_text(APIKeys.generation_config, prompt)
+        print(prompt, "\n\n\n\n")
+        output = gemini.generate_text(settings.generation_config, prompt)
     
         print(output)
         message_replay = toolkit.formatter(output)
