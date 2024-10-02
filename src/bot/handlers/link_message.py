@@ -1,13 +1,12 @@
 from enum import Enum
-import re
 import collections
 
 from crawl4ai import AsyncWebCrawler
 from telebot.async_telebot import AsyncTeleBot
 from telebot.types import Message
 
-from utils import toolkit
-from gemini_manager import gemini_api
+from gemini import gemini_api
+from .. import utils
 
 
 class Messages(Enum):
@@ -16,36 +15,9 @@ class Messages(Enum):
         Just send me a message with your prompt and I'll generate a response for you.
         """)
     
-    def format(self, *args, **kwargs):
+    def format(self, *args, **kwargs) -> str:
         return self.value % kwargs
 
-
-regex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
-
-def contains_url(text: str) -> bool:
-    """
-    """
-    # Ho fatto un esame sulle regex ma sicuro chatgpt le fa meglio di me
-    url_pattern = re.compile(regex)
-    
-    if url_pattern.search(text):
-        return True
-    else:
-        return False
-
-
-def extract_urls(text: str) -> list[str]:
-    """
-    """
-    urls_list = []
-    
-    url_pattern = re.compile(regex)
-    urls = url_pattern.findall(text)
-
-    for url in urls:
-        urls_list.append(url[0])
-
-    return urls_list
 
 
 async def handle_link_message(message: Message, bot: AsyncTeleBot):
@@ -55,12 +27,13 @@ async def handle_link_message(message: Message, bot: AsyncTeleBot):
         ("content", "sub_urls", "original_url")
     )
     urls_content = []
-    urls = extract_urls(message.text)
+    urls = utils.extract_urls(message.text)
 
+    # TODO: use here or inside the gemini_api?
     async with AsyncWebCrawler(verbose=True) as scraper:
         for url in urls:
             content = (await scraper.arun(url=url)).markdown
-            sub_urls = extract_urls(content)
+            sub_urls = utils.extract_urls(content)
 
             element = content_element(
                 content=content, 
@@ -75,13 +48,10 @@ async def handle_link_message(message: Message, bot: AsyncTeleBot):
         print(prompt, "\n\n\n\n")
         output = await gemini_api.generate_text(prompt)
 
-        is_success, reply = toolkit.formatter(output)
-
-        if is_success:
-            await bot.reply_to(
-                message,
-                reply,
-                disable_notification=True,
-                parse_mode='html',
-                reply_markup=toolkit.gen_markup(element.original_url)
-            )
+        await bot.reply_to(
+            message,
+            output,
+            disable_notification=True,
+            parse_mode='html',
+            reply_markup=utils.gen_markup(element.original_url)
+        )
