@@ -48,3 +48,7 @@ docker run --env-file gem_digest.env -d --name gem_digest_bot gem_digest_bot bas
 
 ### Gemini API used:
     - pip3 install google-generativeai
+
+```bash
+echo "export PYTHONDONTWRITEBYTECODE=1" >> ~/.bashrc
+```

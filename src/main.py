@@ -41,6 +41,7 @@ def echo_all(message: types.Message):
 
     for element in urls_content:
         prompt = element.content + "\n\n" + "\n".join(element.sub_urls)
+        print(prompt, "\n\n\n\n")
         output = gemini.generate_text(APIKeys.generation_config, prompt)
     
         print(output)
