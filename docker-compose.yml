@@ -1,0 +1,11 @@
+services:
+
+  bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gem_digest_bot
+    volumes:
+      - $PWD:/home/dev
+    env_file: 
+      - ./api_keys.env
