@@ -1,12 +1,16 @@
 from enum import Enum
 import collections
+from typing import List
 
 from crawl4ai import AsyncWebCrawler
 from telebot.async_telebot import AsyncTeleBot
 from telebot.types import Message
 
+from crawler import crawl_urls, ScrapeResult
 from gemini import gemini_api
-from .. import utils
+import utils
+
+from ..bot_utils import generate_article_button_markup
 
 
 class Messages(Enum):
@@ -17,35 +21,16 @@ class Messages(Enum):
     
     def format(self, *args, **kwargs) -> str:
         return self.value % kwargs
-
-
+    
 
 async def handle_link_message(message: Message, bot: AsyncTeleBot):
-    
-    content_element = collections.namedtuple(
-        "ContentElement", 
-        ("content", "sub_urls", "original_url")
-    )
-    urls_content = []
+
     urls = utils.extract_urls(message.text)
-
-    # TODO: use here or inside the gemini_api?
-    async with AsyncWebCrawler(verbose=True) as scraper:
-        for url in urls:
-            content = (await scraper.arun(url=url)).markdown
-            sub_urls = utils.extract_urls(content)
-
-            element = content_element(
-                content=content, 
-                sub_urls=sub_urls,
-                original_url=url
-            )
-
-            urls_content.append(element)
+            
+    scrape_results: List[ScrapeResult] = await crawl_urls(urls)
     
-    for element in urls_content:
-        prompt = element.content + "\n\n" + "\n".join(element.sub_urls)
-        print(prompt, "\n\n\n\n")
+    for result in scrape_results:
+        prompt = result.content + "\n\n" + "\n".join(result.sub_urls)
         output = await gemini_api.generate_text(prompt)
 
         await bot.reply_to(
@@ -53,5 +38,5 @@ async def handle_link_message(message: Message, bot: AsyncTeleBot):
             output,
             disable_notification=True,
             parse_mode='html',
-            reply_markup=utils.gen_markup(element.original_url)
+            reply_markup=generate_article_button_markup(result.original_url)
         )
