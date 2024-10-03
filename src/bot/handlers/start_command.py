@@ -12,11 +12,13 @@ class Messages(Enum):
         Just send me a message with your prompt and I'll generate a response for you.
         """)
     
-    def format(self, *args, **kwargs):
+    def format(self, *args, **kwargs) -> str:
         return self.value % kwargs
 
 
-async def handle_start_command(message: Message, bot: AsyncTeleBot):
+async def handle_start_command(message: Message, bot: AsyncTeleBot) -> None:
+    """
+    """
     await bot.send_message(
         message.chat.id,
         Messages.START_TEMPLATE.format(user_name=message.from_user.first_name)
