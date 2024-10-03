@@ -3,19 +3,15 @@ import asyncio
 from telebot.async_telebot import AsyncTeleBot
 from telebot import ExceptionHandler
 
-from configs import api_keys
-from utils import has_url
+from configs import APIKeys
+from utils import link_utils
 
 from .handlers import start_command
 from .handlers import link_message
-from . import filters
-
+from .filters.links_filter import LinkFilter
 
 def register_custom_filters(bot: AsyncTeleBot) -> None:
-    """
-    #TODO:
-    """
-    bot.add_custom_filter(filters.LinkFilter())
+    bot.add_custom_filter(LinkFilter())
 
 
 def register_handlers(bot: AsyncTeleBot) -> None:
@@ -48,7 +44,7 @@ def register_handlers(bot: AsyncTeleBot) -> None:
     bot.register_message_handler(
         link_message.handle_link_message,
         content_types=['text'],
-        func=lambda msg: has_url(msg.text),
+        func=lambda msg: link_utils.has_url(msg.text),
         pass_bot=True
     )
 
@@ -69,7 +65,7 @@ def run() -> None:
     debug=True
 
     gem_digest_bot = AsyncTeleBot(
-        token = api_keys.TELEGRAM_BOT_TOKEN, 
+        token = APIKeys.TELEGRAM_BOT_TOKEN, 
         exception_handler=ExceptionHandler()
     )
 

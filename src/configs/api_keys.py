@@ -13,4 +13,4 @@ class _APIKeys(object):
             return os.environ["TELEGRAM_API_KEY"]
         raise RuntimeError("TELEGRAM_API_KEY environment variable not set")
     
-api_keys = _APIKeys()
+APIKeys = _APIKeys()

@@ -1,1 +1,1 @@
-from .crawler_helper import crawl_urls, ScrapeResult
+from .crawler_helper import crawl_urls, ScrapeResult, ResultAttributes

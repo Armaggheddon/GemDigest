@@ -1,16 +1,14 @@
 from enum import Enum
-import collections
 from typing import List
 
-from crawl4ai import AsyncWebCrawler
 from telebot.async_telebot import AsyncTeleBot
 from telebot.types import Message
 
 from crawler import crawl_urls, ScrapeResult
-from gemini import gemini_api
-import utils
+from gemini import gemini_api_client
+from utils import link_utils
 
-from ..bot_utils import generate_article_button_markup
+from ..bot_utils import message_markup
 
 
 class Messages(Enum):
@@ -25,18 +23,18 @@ class Messages(Enum):
 
 async def handle_link_message(message: Message, bot: AsyncTeleBot):
 
-    urls = utils.extract_urls(message.text)
+    urls = link_utils.extract_urls(message.text)
             
     scrape_results: List[ScrapeResult] = await crawl_urls(urls)
     
     for result in scrape_results:
         prompt = result.content + "\n\n" + "\n".join(result.sub_urls)
-        output = await gemini_api.generate_text(prompt)
+        output = await gemini_api_client.generate_text(prompt)
 
         await bot.reply_to(
             message,
             output,
             disable_notification=True,
             parse_mode='html',
-            reply_markup=generate_article_button_markup(result.original_url)
+            reply_markup=message_markup.generate_article_button_markup(result.original_url)
         )
