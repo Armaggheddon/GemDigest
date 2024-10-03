@@ -4,11 +4,11 @@ from telebot.async_telebot import AsyncTeleBot
 from telebot import ExceptionHandler
 
 from configs import api_keys
+from utils import has_url
 
 from .handlers import start_command
 from .handlers import link_message
 from . import filters
-from . import utils
 
 def register_custom_filters(bot: AsyncTeleBot) -> None:
     bot.add_custom_filter(filters.LinkFilter())
@@ -23,7 +23,7 @@ def register_handlers(bot: AsyncTeleBot) -> None:
     bot.register_message_handler(
         link_message.handle_link_message,
         content_types=['text'],
-        func=lambda msg: utils.has_url(msg.text),
+        func=lambda msg: has_url(msg.text),
         pass_bot=True
     )
 
@@ -38,4 +38,4 @@ def run() -> None:
     #register_custom_filters(gem_digest_bot)
     register_handlers(gem_digest_bot)
 
-    asyncio.run(gem_digest_bot.polling())
+    asyncio.run(gem_digest_bot.polling(), debug=True)
