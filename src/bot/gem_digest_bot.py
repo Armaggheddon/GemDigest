@@ -11,6 +11,9 @@ from .handlers import link_message
 from .filters.links_filter import LinkFilter
 
 def register_custom_filters(bot: AsyncTeleBot) -> None:
+    """
+    TODO:
+    """
     bot.add_custom_filter(LinkFilter())
 
 
