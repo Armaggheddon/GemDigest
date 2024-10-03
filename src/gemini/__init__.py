@@ -1,1 +1,1 @@
-from .manager import gemini_api
+from .client import gemini_api
