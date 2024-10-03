@@ -1,6 +1,6 @@
 from telebot.types import Message
 from telebot.asyncio_filters import AdvancedCustomFilter
-from ..utils import has_url
+from utils import has_url
 
 class LinkFilter(AdvancedCustomFilter):
     key="has_url"
