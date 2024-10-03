@@ -10,7 +10,7 @@ def format_gemini_response(raw_str: str) -> Tuple[bool, str]:
     try:
         title = _title_builder(raw_json["title"])
         summary = _summary_builder(raw_json["summary"])
-        image = _image_builder(raw_json["url"])
+        image = _image_builder(raw_json["image_url"])
 
     except TypeError as e:
         # Log the error or return a default message
