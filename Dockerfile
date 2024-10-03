@@ -1,4 +1,4 @@
-FROM python:3
+FROM python:3.12.7
 
 # Set the working directory
 WORKDIR /gem_digest_bot
