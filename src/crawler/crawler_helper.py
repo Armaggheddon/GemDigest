@@ -1,12 +1,13 @@
 import asyncio
 from enum import Enum
 from typing import Union, List, Tuple
-from dataclasses import dataclass, Field
+from dataclasses import dataclass
 
 from crawl4ai import AsyncWebCrawler
 
-from cache import AsyncCache
-from utils import extract_urls
+from utils import link_utils
+from cache.async_cache import AsyncCache
+
 
 class ResultAttributes(Enum):
     MARKDOWN = "markdown"
@@ -55,7 +56,7 @@ async def _crawl_urls(
             [
                 ScrapeResult(
                     content=getattr(result, result_attribute.value),
-                    sub_urls=extract_urls(getattr(result, result_attribute.value)),
+                    sub_urls=link_utils.extract_urls(getattr(result, result_attribute.value)),
                     original_url=url
                 )
                 for result, url in zip(_crawl_results, crawl_urls)

@@ -1,12 +1,3 @@
-
-generation_config = {
-  "temperature": 1,
-  "top_p": 0.95,
-  "top_k": 40,
-  "max_output_tokens": 8192,
-  "response_mime_type": "application/json",
-}
-
 gemini_prompt_v1 = """
 Summarize the following text by extracting only the most essential 
 information. Focus on the key points, removing any superfluous or repetitive 
@@ -46,7 +37,7 @@ that better represent the context of the text provided in input.
 MUST be summary and the key for the image url MUST be url.
 """
 
-gemini_system_prompt = """
+system_prompt = """
 You will be given an input text and a list of image URLs. Your task is to perform a detailed analysis and generate the following output in JSON format. Ensure the output follows these exact steps and structure:
 
 Step-by-Step Instructions:

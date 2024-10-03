@@ -1,2 +1,1 @@
-from .environment_variables import api_keys
-from .gemini_configs import *
+from .api_keys import APIKeys
