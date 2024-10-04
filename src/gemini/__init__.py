@@ -1,1 +1,1 @@
-from .api_client import gemini_api_client
+from .api_client import GeminiAPIClient

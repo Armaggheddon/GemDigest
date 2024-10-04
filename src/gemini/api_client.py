@@ -1,12 +1,17 @@
+from typing import Optional
+
 import google.generativeai as genai
 
-from configs import APIKeys
+from configs import api_keys
 from cache import AsyncCache
 from .prompts import system_prompt
 from .formatter import format_gemini_response
 
 
-class _GeminiAPIClient():
+class GeminiAPIClient():
+    
+    _instance: Optional['GeminiAPIClient'] = None
+    
     def __init__(self, api_key: str) -> None:
         self.api_key = api_key
         self.generation_config = {
@@ -28,12 +33,33 @@ class _GeminiAPIClient():
         # Session starts empty
         self.chat_session = self.model.start_chat()
 
+    @staticmethod
+    def _touch_instance():
+        # Creates a new instance if not already
+        # exists.
+        # Has a "lazy loading" like behavior
+        if not GeminiAPIClient._instance:
+            GeminiAPIClient._instance = GeminiAPIClient(api_keys.get_gemini_api_key())
+    
+    
     @AsyncCache.lru_cache(max_size=1000)
-    async def generate_text(
-            self, prompt: str, format: bool = True
-    ) -> str:
-        # TODO: handle a per-user chat session (?)
+    @staticmethod
+    async def generate_text(prompt: str, format: bool = True):
+        # Public facing method that can be used to 
+        # interact without having to manage a class
+        # instance
+        GeminiAPIClient._touch_instance()
+        return await GeminiAPIClient._instance._generate_text(prompt, format)
+    
 
+    async def _generate_text(
+        self, prompt: str, format: bool = True
+    ) -> str:
+        # Private instance method that actually
+        # can interact with the instance properties
+        # functions and variables...
+        
+        # TODO: handle a per-user chat session (?)
         response = await self.chat_session.send_message_async(prompt)
         response = response.text
         
@@ -45,6 +71,3 @@ class _GeminiAPIClient():
                 response = _response
 
         return response
-    
-
-gemini_api_client = _GeminiAPIClient(APIKeys.GEMINI_API_KEY)
