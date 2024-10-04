@@ -25,9 +25,10 @@ class _APIKeys(object):
         Raises:
             RuntimeError: If the GEMINI_API_KEY environment variable is not set.
         """
-        if "GEMINI_API_KEY" in os.environ:
+        try:
             return os.environ["GEMINI_API_KEY"]
-        raise RuntimeError("GEMINI_API_KEY environment variable not set")
+        except RuntimeError as e:
+            raise RuntimeError("GEMINI_API_KEY environment variable not set")
 
 
     @property
@@ -40,8 +41,10 @@ class _APIKeys(object):
         Raises:
             RuntimeError: If the TELEGRAM_API_KEY environment variable is not set.
         """
-        if "TELEGRAM_API_KEY" in os.environ:
+        try:
             return os.environ["TELEGRAM_API_KEY"]
-        raise RuntimeError("TELEGRAM_API_KEY environment variable not set")
+        except RuntimeError as e:
+             raise RuntimeError("TELEGRAM_API_KEY environment variable not set")
+       
     
 APIKeys = _APIKeys()
