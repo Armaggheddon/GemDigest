@@ -1,4 +1,5 @@
 import asyncio
+import logging
 from enum import Enum
 from typing import Union, List, Tuple
 from dataclasses import dataclass
@@ -7,7 +8,10 @@ from crawl4ai import AsyncWebCrawler
 
 from utils import link_utils
 from cache.async_cache import AsyncCache
+from configs.logger import setup_logger
 
+setup_logger()
+logger = logging.getLogger(__name__)
 
 class ResultAttributes(Enum):
     MARKDOWN = "markdown"
@@ -46,23 +50,25 @@ async def _crawl_urls(
     scrape_results = []
 
     async with AsyncWebCrawler(verbose=verbose) as scraper:
-        
         # Crawl all the urls in parallel
         _crawl_result_futures = asyncio.gather(
-            *[scraper.arun(url=url) for url in crawl_urls]
+            *[scraper.arun(url=url, word_count_threshold=200) for url in crawl_urls]
         )
+        
         _crawl_results = await _crawl_result_futures
 
-        scrape_results.extend(
-            [
+        for crawl_result in _crawl_results:
+            if crawl_result.error_message:
+                logging.info(crawl_result.error_message)
+                continue
+
+            scrape_results.append(
                 ScrapeResult(
-                    content=getattr(result, result_attribute.value),
-                    sub_urls=link_utils.extract_urls(getattr(result, result_attribute.value)),
-                    original_url=url
+                    content=getattr(crawl_result, result_attribute.value),
+                    sub_urls=link_utils.extract_urls(getattr(crawl_result, result_attribute.value)),
+                    original_url=crawl_result.url
                 )
-                for result, url in zip(_crawl_results, crawl_urls)
-            ]
-        )
+            )
 
     return scrape_results
 

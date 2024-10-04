@@ -1,23 +1,23 @@
+import logging
 from typing import Tuple
-import json
+
+from configs.logger import setup_logger
+from .json_parser import parse_gemini_json
+
+setup_logger()
+logger = logging.getLogger(__name__)
 
 
-def format_gemini_response(raw_str: str) -> Tuple[bool, str]:
+def format_gemini_response(raw_str: str) -> str:
     """
     """
-    raw_json = json.loads(raw_str)
-
-    try:
-        title = _title_builder(raw_json["title"])
-        summary = _summary_builder(raw_json["summary"])
-        image = _image_builder(raw_json["image_url"])
-
-    except TypeError as e:
-        # Log the error or return a default message
-        print(f"Error processing raw_json: {raw_json}, error: {e}")
-        return (False, "Error: Invalid data format.")
+    parserd_output = parse_gemini_json(raw_str)
     
-    return (True, f"<b>{title}</b>\n\n{summary}\n<a href='{image}'>&#8205</a>")
+    title =  _title_builder(parserd_output.title)
+    summary =  _summary_builder(parserd_output.summary)
+    image =  _title_builder(parserd_output.image_url)
+
+    return f"<b>{title}</b>\n\n{summary}\n<a href='{image}'>&#8205</a>"
 
 
 def _title_builder(title: str) -> str:

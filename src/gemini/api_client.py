@@ -1,11 +1,18 @@
+import logging
 from typing import Optional
 
 import google.generativeai as genai
+from google.api_core.exceptions import GoogleAPIError
 
 from configs import api_keys
 from cache import AsyncCache
+from configs.logger import setup_logger
 from .prompts import system_prompt
 from .formatter import format_gemini_response
+
+
+setup_logger()
+logger = logging.getLogger(__name__)
 
 
 class GeminiAPIClient():
@@ -20,6 +27,7 @@ class GeminiAPIClient():
             "top_k": 40,
             "max_output_tokens": 8192,
             "response_mime_type": "application/json",
+            # TODO: "response_schema": Recipe,
         }
 
         genai.configure(api_key=self.api_key)
@@ -44,30 +52,48 @@ class GeminiAPIClient():
     
     @AsyncCache.lru_cache(max_size=1000)
     @staticmethod
-    async def generate_text(prompt: str, format: bool = True):
+    async def generate_text(
+        prompt: str,
+        format: bool = True,
+        max_retries: int = 2
+    ):
         # Public facing method that can be used to 
         # interact without having to manage a class
         # instance
         GeminiAPIClient._touch_instance()
-        return await GeminiAPIClient._instance._generate_text(prompt, format)
+        return await GeminiAPIClient._instance._generate_text(
+            prompt, format, max_retries)
     
 
     async def _generate_text(
-        self, prompt: str, format: bool = True
+        self,
+        prompt: str,
+        format: bool,
+        max_retries: int
     ) -> str:
         # Private instance method that actually
         # can interact with the instance properties
         # functions and variables...
-        
-        # TODO: handle a per-user chat session (?)
-        response = await self.chat_session.send_message_async(prompt)
-        response = response.text
-        
-        # print(response)
-        
-        if format:
-            success, _response = format_gemini_response(response)
-            if success:
-                response = _response
+        success = False
 
-        return response
+        while max_retries > 0 and not success:
+            # TODO: handle a per-user chat session (?)
+            try:
+                response = await self.chat_session.send_message_async(prompt)
+                response = response.text
+                if not format:
+                    return response
+                
+                response = format_gemini_response(response)
+                success = True
+            
+            except GoogleAPIError as e:
+                logging.error(f"{e}")
+            
+            except ValueError as e:
+                logging.error(f"{e}")
+            
+            finally:
+                max_retries -= 1
+                
+        return response if success else "Error (。_。)" 

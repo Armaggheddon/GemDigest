@@ -1,14 +1,21 @@
 import asyncio
+import logging
 
 from telebot.async_telebot import AsyncTeleBot
 from telebot import ExceptionHandler
 
 from configs import api_keys
 from utils import link_utils
+from configs.logger import setup_logger
 
 from .handlers import start_command
 from .handlers import link_message
 from .filters.links_filter import LinkFilter
+
+
+setup_logger()
+logger = logging.getLogger(__name__)
+
 
 def register_custom_filters(bot: AsyncTeleBot) -> None:
     """
@@ -65,15 +72,16 @@ def run() -> None:
         The bot is running with `debug=True`.
         Remove befor deploying the bot to production.
     """
-    debug=True
+    debug=False
+    
+    if debug:
+        logging.warning(f"Debug Mode enabled for the bot asyncio runner.")
 
     gem_digest_bot = AsyncTeleBot(
-        token = api_keys.get_telegram_api_key(), 
+        token = api_keys.get_telegram_api_key(),
         exception_handler=ExceptionHandler()
     )
 
     #register_custom_filters(gem_digest_bot)
     register_handlers(gem_digest_bot)
-
-    print("[WARNING]: The debig Mode is enabled for the bot asyncio runner.")
     asyncio.run(gem_digest_bot.polling(), debug=debug)
