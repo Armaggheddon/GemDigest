@@ -11,6 +11,7 @@ from cache.async_cache import AsyncCache
 
 class ResultAttributes(Enum):
     MARKDOWN = "markdown"
+    EXTRACTED_CONTENT = "extracted_content"
     
 @dataclass
 class ScrapeResult():
