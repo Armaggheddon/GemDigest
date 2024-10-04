@@ -3,7 +3,7 @@ import asyncio
 from telebot.async_telebot import AsyncTeleBot
 from telebot import ExceptionHandler
 
-from configs import APIKeys
+from configs import api_keys
 from utils import link_utils
 
 from .handlers import start_command
@@ -68,7 +68,7 @@ def run() -> None:
     debug=True
 
     gem_digest_bot = AsyncTeleBot(
-        token = APIKeys.TELEGRAM_BOT_TOKEN, 
+        token = api_keys.get_telegram_api_key(), 
         exception_handler=ExceptionHandler()
     )
 
