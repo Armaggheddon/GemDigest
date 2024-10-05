@@ -1,3 +1,6 @@
+"""
+# 
+"""
 import asyncio
 import logging
 
@@ -75,7 +78,7 @@ def run() -> None:
     debug=False
     
     if debug:
-        logging.warning(f"Debug Mode enabled for the bot asyncio runner.")
+        logging.warning("Debug Mode enabled for the bot asyncio runner.")
 
     gem_digest_bot = AsyncTeleBot(
         token = api_keys.get_telegram_api_key(),
