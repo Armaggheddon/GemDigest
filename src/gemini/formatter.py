@@ -35,7 +35,17 @@ def _summary_builder(summary: str) -> str:
     """
     TODO:
     """
-    return summary
+    
+    tokens = summary.split("**")
+    for i in range(1, len(tokens), 2):
+        tokens[i] = f"<b>{tokens[i]}</b>"
+    
+    tokens = "".join(tokens)
+    tokens = tokens.split("`")
+    for i in range(1, len(tokens), 2):
+        tokens[i] = f"<code>{tokens[i]}</code>"
+
+    return "".join(tokens)
 
 
 def _image_builder(image_url: str) -> str:
