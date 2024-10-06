@@ -39,7 +39,10 @@ class GeminiAPIClient():
         )
 
         # Session starts empty
-        self.chat_session = self.model.start_chat()
+        # self.chat_session = self.model.start_chat()
+
+        self.input_token_count = 0
+        self.output_token_count = 0
 
     @staticmethod
     def _touch_instance():
@@ -49,6 +52,15 @@ class GeminiAPIClient():
         if not GeminiAPIClient._instance:
             GeminiAPIClient._instance = GeminiAPIClient(api_keys.get_gemini_api_key())
     
+    @staticmethod
+    @property # TODO: not sure if encapsulating staticmethod with property works
+    def used_tokens() -> int:
+        # TODO: add dataclass that includes 
+        # both input and output tokens
+        GeminiAPIClient._touch_instance()
+        input_tokens = GeminiAPIClient._instance.input_token_count
+        output_tokens = GeminiAPIClient._instance.output_token_count
+        return input_tokens + output_tokens
     
     @AsyncCache.lru_cache(max_size=1000)
     @staticmethod
@@ -79,12 +91,29 @@ class GeminiAPIClient():
         while max_retries > 0 and not success:
             # TODO: handle a per-user chat session (?)
             try:
-                response = await self.chat_session.send_message_async(prompt)
-                response = response.text
+                # Use generate_content instead of 
+                # chat_session since we are not
+                # interacting with the model in a
+                # conversational manner, but rather
+                # generating one-time content based
+                # on a prompt
+                response = await self.model.generate_content_async(prompt)
+                # print(response)
+                generated_text = response.text
+
+                # token count in gemini api uses caching, therefore
+                # the prompt_token_count will remain the same
+                # for the same prompt. Similar behavior is seen
+                # in candidates_token_count. The only "stable"
+                # number is total_token_count. Maybe just use that ?!
+                usage_metadata = response.usage_metadata
+                self.input_token_count += usage_metadata.prompt_token_count
+                self.output_token_count += usage_metadata.candidates_token_count
+
                 if not format:
-                    return response
+                    return generated_text
                 
-                response = format_gemini_response(response)
+                generated_text = format_gemini_response(generated_text)
                 success = True
             
             except GoogleAPIError as e:
@@ -96,4 +125,4 @@ class GeminiAPIClient():
             finally:
                 max_retries -= 1
                 
-        return response if success else "Error (。_。)" 
+        return generated_text if success else "Error (。_。)" 
