@@ -1,5 +1,6 @@
 from typing import List
 import re
+from urllib.parse import urlparse
 
 _links_regex_template = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
 
@@ -48,3 +49,25 @@ def extract_urls(text: str) -> List[str]:
     urls = links_regex.findall(text)
     urls_list = [url[0] for url in urls]
     return urls_list
+
+def is_youtube(link: str) -> bool:
+    """
+    Check if the given link is a YouTube URL.
+
+    This function checks if the given link is a YouTube URL by comparing the 
+    domain name to "youtube.com" and "youtu.be". It returns `True` if the link 
+    is a YouTube URL, and `False` otherwise.
+
+    Args:
+        link (str): The link to check.
+
+    Returns:
+        bool: `True` if the link is a YouTube URL, `False` otherwise.
+
+    Example:
+        is_youtube("https://www.youtube.com/watch?v=dQw4w9WgXcQ")  # Returns: True
+    """
+
+    host = urlparse(link).hostname
+
+    return host == "www.youtube.com"
