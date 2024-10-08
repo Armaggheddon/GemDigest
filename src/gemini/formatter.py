@@ -4,13 +4,9 @@ import itertools
 from io import StringIO
 from typing import Mapping, Any, List, Tuple
 
-from configs.logger import setup_logger
 from .json_parser import parse_gemini_json
 from .types import GeminiOutputFormatTemplate
 
-
-setup_logger()
-logger = logging.getLogger(__name__)
 
 
 def format_gemini_response(

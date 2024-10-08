@@ -8,10 +8,7 @@ from crawl4ai import AsyncWebCrawler
 
 from utils import link_utils
 from cache.async_cache import AsyncCache
-from configs.logger import setup_logger
 
-setup_logger()
-logger = logging.getLogger(__name__)
 
 class ResultAttributes(Enum):
     MARKDOWN = "markdown"
