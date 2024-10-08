@@ -9,15 +9,14 @@ from telebot import ExceptionHandler
 
 from configs import api_keys
 from utils import link_utils
-from configs.logger import setup_logger
 
-from .handlers import start_command
-from .handlers import link_message
+from .handlers import (
+    start_command,
+    link_message,
+    tokens_command
+)
 from .filters.links_filter import LinkFilter
 
-
-setup_logger()
-logger = logging.getLogger(__name__)
 
 
 def register_custom_filters(bot: AsyncTeleBot) -> None:
@@ -58,6 +57,12 @@ def register_handlers(bot: AsyncTeleBot) -> None:
         link_message.handle_link_message,
         content_types=['text'],
         func=lambda msg: link_utils.has_url(msg.text),
+        pass_bot=True
+    )
+
+    bot.register_message_handler(
+        tokens_command.handle_tokens_command,
+        commands=[tokens_command.CMD],
         pass_bot=True
     )
 
