@@ -15,7 +15,8 @@ from .handlers import (
     link_message,
     tokens_command
 )
-from .filters.links_filter import LinkFilter
+
+from . import filters
 
 
 
@@ -23,7 +24,8 @@ def register_custom_filters(bot: AsyncTeleBot) -> None:
     """
     TODO:
     """
-    bot.add_custom_filter(LinkFilter())
+    bot.add_custom_filter(filters.AdminFilter(api_keys.get_admin_user_id()))
+    bot.add_custom_filter(filters.LinkFilter())
 
 
 def register_handlers(bot: AsyncTeleBot) -> None:
@@ -47,23 +49,32 @@ def register_handlers(bot: AsyncTeleBot) -> None:
         The `pass_bot=True` argument is used to pass the bot instance to 
             the handler functions.
     """
+
+    _filter_link = {filters.LinkFilter.key: True}
+    _filter_admin = {filters.AdminFilter.key: True}
+    _filter_link_admin = {**_filter_link, **_filter_admin}
+
+
     bot.register_message_handler(
         start_command.handle_start_command,
         commands=[start_command.CMD],
-        pass_bot=True
+        pass_bot=True,
+        **_filter_admin
     )
 
     bot.register_message_handler(
         link_message.handle_link_message,
         content_types=['text'],
         func=lambda msg: link_utils.has_url(msg.text),
-        pass_bot=True
+        pass_bot=True,
+        **_filter_link_admin
     )
 
     bot.register_message_handler(
         tokens_command.handle_tokens_command,
         commands=[tokens_command.CMD],
-        pass_bot=True
+        pass_bot=True,
+        **_filter_admin
     )
 
 
@@ -90,6 +101,7 @@ def run() -> None:
         exception_handler=ExceptionHandler()
     )
 
-    #register_custom_filters(gem_digest_bot)
     register_handlers(gem_digest_bot)
+    register_custom_filters(gem_digest_bot)
+
     asyncio.run(gem_digest_bot.polling(), debug=debug)
