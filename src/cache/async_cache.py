@@ -10,9 +10,12 @@ class CacheEntry:
     value: Any = field(init=True)
 
 
-def lru_cache_with_age(max_size: int = 128, max_age: int = -1):
+def lru_cache_with_age(max_size: int = 128, max_age: int = -1, refresh_on_access: bool = False):
     
     # max_age is in seconds!, use -1 for no expiration
+    # refresh_on_access -> determines if the cache max_age should
+    # be updated on access, if False, the cache will expire after max_age 
+    # seconds regardless of access
 
     def decorator(func: Callable):
         
@@ -36,7 +39,8 @@ def lru_cache_with_age(max_size: int = 128, max_age: int = -1):
                     raise KeyError
                 else:
                     # update the age of the cache entry
-                    _cache[key].age = time.time()
+                    if refresh_on_access: 
+                        _cache[key].age = time.time()
                     _cache.move_to_end(key)
                     result = val
             except KeyError:
