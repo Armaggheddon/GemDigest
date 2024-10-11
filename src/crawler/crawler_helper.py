@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from crawl4ai import AsyncWebCrawler
 
 from utils import link_utils
-from cache.async_cache import AsyncCache
+from cache import lru_cache_with_age
 
 
 class ResultAttributes(Enum):
@@ -36,7 +36,8 @@ async def crawl_urls(
 
     return await _crawl_urls(tuple(urls), result_attribute, verbose)
 
-@AsyncCache.lru_cache(max_size=1000)
+
+@lru_cache_with_age(max_size=1000)
 async def _crawl_urls(
     urls: Tuple[str], 
     result_attribute: ResultAttributes = ResultAttributes.MARKDOWN, 

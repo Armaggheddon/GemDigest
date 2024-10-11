@@ -6,7 +6,7 @@ import google.generativeai as genai
 from google.api_core.exceptions import GoogleAPIError
 
 from configs import api_keys
-from cache import AsyncCache
+from cache import lru_cache_with_age
 from .prompts import system_prompt
 from .formatter import format_gemini_response
 from .types import (
@@ -59,7 +59,7 @@ class GeminiAPIClient():
         
         return GeminiAPIClient._instance.token_count
     
-    @AsyncCache.lru_cache(max_size=1000)
+    @lru_cache_with_age(max_size=1000)
     @staticmethod
     async def generate_text(
         prompt: str,
