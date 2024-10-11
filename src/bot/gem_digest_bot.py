@@ -13,7 +13,8 @@ from utils import link_utils
 from .handlers import (
     start_command,
     link_message,
-    tokens_command
+    tokens_command,
+    help_command
 )
 
 from . import filters
@@ -73,6 +74,13 @@ def register_handlers(bot: AsyncTeleBot) -> None:
     bot.register_message_handler(
         tokens_command.handle_tokens_command,
         commands=[tokens_command.CMD],
+        pass_bot=True,
+        **_filter_admin
+    )
+
+    bot.register_message_handler(
+        help_command.handle_help_command,
+        commands=[help_command.CMD],
         pass_bot=True,
         **_filter_admin
     )
