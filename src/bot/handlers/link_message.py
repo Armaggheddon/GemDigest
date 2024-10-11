@@ -5,7 +5,7 @@ from telebot.async_telebot import AsyncTeleBot
 from telebot.types import Message
 
 from crawler import crawl_urls, ScrapeResult
-from gemini import GeminiAPIClient
+from gemini import GeminiAPIClient, GeminiResponse
 from utils import link_utils
 
 from ..bot_utils import message_markup
@@ -76,11 +76,13 @@ async def handle_link_message(message: Message, bot: AsyncTeleBot) -> None:
     
     for result in scrape_results:
         prompt = result.content + "\n\n" + "\n".join(result.sub_urls)
-        output = await GeminiAPIClient.generate_text(prompt)
+        output: GeminiResponse = await GeminiAPIClient.generate_text(prompt)
+
+        # TODO: add error_message formatting
 
         await bot.reply_to(
             message,
-            output,
+            output.text if output.text else output.error_message,
             disable_notification=True,
             parse_mode='html',
             reply_markup=message_markup.generate_article_button_markup(
