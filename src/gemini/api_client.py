@@ -12,7 +12,8 @@ from .formatter import format_gemini_response
 from .types import (
     GeminiTokenCount, 
     GeminiFinishReasonMessages, 
-    GeminiResponse
+    GeminiResponse,
+    GeminiModelInfo
 )
 
 
@@ -21,22 +22,31 @@ class GeminiAPIClient():
     _instance: Optional['GeminiAPIClient'] = None
     
     def __init__(self, api_key: str) -> None:
-        self.api_key = api_key
-        self.generation_config = {
-            "temperature": 1,
-            "top_p": 0.95,
-            "top_k": 40,
-            "max_output_tokens": 8192,
-            "response_mime_type": "application/json",
-            # TODO: "response_schema": Recipe,
-        }
+
+        generation_config = genai.GenerationConfig(
+            candidate_count=1,
+            temperature=1,
+            top_p=0.95,
+            top_k=40,
+            max_output_tokens=8192,
+            response_mime_type="application/json",
+        )
+
         model_name = "gemini-1.5-flash-001"
 
-        genai.configure(api_key=self.api_key)
+        self.model_info = GeminiModelInfo(
+            model_name=model_name,
+            temperature=generation_config.temperature,
+            top_p=generation_config.top_p,
+            top_k=generation_config.top_k,
+            max_output_tokens=generation_config.max_output_tokens
+        )
+
+        genai.configure(api_key=api_key)
 
         self.model = genai.GenerativeModel(
             model_name=model_name,
-            generation_config=self.generation_config,
+            generation_config=generation_config,
             system_instruction=system_prompt
         )
 
@@ -58,6 +68,11 @@ class GeminiAPIClient():
         GeminiAPIClient._touch_instance()
         
         return GeminiAPIClient._instance.token_count
+    
+    @staticmethod
+    def get_model_info():
+        GeminiAPIClient._touch_instance()
+        return GeminiAPIClient._instance.model_info
     
     @lru_cache_with_age(max_size=1000)
     @staticmethod
