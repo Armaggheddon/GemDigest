@@ -70,6 +70,16 @@ class GeminiResponse:
 
 
 @dataclass
+class GeminiModelInfo:
+    """Represents the information about the Gemini model configuration used."""
+    model_name: str
+    temperature: float
+    top_p: float
+    top_k: int
+    max_output_tokens: int
+
+
+@dataclass
 class GeminiTokenCount:
     """Data class to track token usage by the Gemini model.
 

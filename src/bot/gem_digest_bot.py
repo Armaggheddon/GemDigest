@@ -28,7 +28,8 @@ from .handlers import (
     start_command,
     link_message,
     tokens_command,
-    help_command
+    help_command,
+    info_command
 )
 
 from . import filters
@@ -96,6 +97,13 @@ def register_handlers(bot: AsyncTeleBot) -> None:
     bot.register_message_handler(
         tokens_command.handle_tokens_command,
         commands=[tokens_command.CMD],
+        pass_bot=True,
+        **_filter_admin
+    )
+
+    bot.register_message_handler(
+        info_command.handle_info_command,
+        commands=[info_command.CMD],
         pass_bot=True,
         **_filter_admin
     )
