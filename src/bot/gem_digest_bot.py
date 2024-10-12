@@ -1,5 +1,19 @@
-"""
-# 
+"""This module initializes and runs the GemDigest Telegram bot using the 
+    AsyncTeleBot from the telebot library. It registers custom filters and 
+    handlers for various commands and messages, including /start, /tokens, 
+    and links containing messages. The bot operates with asynchronous polling 
+    to handle incoming messages.
+
+Functions:
+    register_custom_filters(bot: AsyncTeleBot) -> None:
+        Registers custom filters for the bot to manage admin access and 
+        link messages.
+
+    register_handlers(bot: AsyncTeleBot) -> None:
+        Registers message handlers for various commands and link messages.
+
+    run() -> None:
+        Initializes and starts the GemDigest bot with asynchronous polling.
 """
 import asyncio
 import logging
@@ -20,10 +34,19 @@ from .handlers import (
 from . import filters
 
 
-
 def register_custom_filters(bot: AsyncTeleBot) -> None:
-    """
-    TODO:
+    """Registers custom filters for the bot.
+
+    This function adds filters to the bot for managing admin access 
+    and link messages.
+
+    Args:
+        bot (AsyncTeleBot): The bot instance to which the filters are 
+            being added.
+
+    NOTE:
+        The admin filter uses the admin user ID from the API keys 
+        configuration.
     """
     bot.add_custom_filter(filters.AdminFilter(api_keys.get_admin_user_id()))
     bot.add_custom_filter(filters.LinkFilter())
@@ -50,7 +73,6 @@ def register_handlers(bot: AsyncTeleBot) -> None:
         The `pass_bot=True` argument is used to pass the bot instance to 
             the handler functions.
     """
-
     _filter_link = {filters.LinkFilter.key: True}
     _filter_admin = {filters.AdminFilter.key: True}
     _filter_link_admin = {**_filter_link, **_filter_admin}

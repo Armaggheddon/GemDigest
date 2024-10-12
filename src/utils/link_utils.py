@@ -1,10 +1,31 @@
+"""This module provides functions for detecting, extracting, and verifying 
+    URLs in text.
+
+The module includes regular expressions to detect URLs in a string, 
+    and functions to:
+- Check if a string contains a URL.
+- Extract all URLs from a given text.
+- Verify if a URL belongs to YouTube.
+
+Functions:
+    - has_url: Checks if a given string contains a URL.
+    - extract_urls: Extracts and returns a list of URLs from a given string.
+    - is_youtube: Checks if a given URL is a YouTube link.
+
+Imports:
+    - List (from typing): For type hinting list return types.
+    - re: For using regular expressions to find URLs.
+    - urlparse (from urllib.parse): To parse and check URL components.
+"""
 from typing import List
 import re
 from urllib.parse import urlparse
 
+
 _links_regex_template = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
 
 links_regex = re.compile(_links_regex_template)
+
 
 def has_url(text: str) -> bool:
     """Checks whether the given text contains a URL.
@@ -50,6 +71,7 @@ def extract_urls(text: str) -> List[str]:
     urls_list = [url[0] for url in urls]
     return urls_list
 
+
 def is_youtube(link: str) -> bool:
     """
     Check if the given link is a YouTube URL.
@@ -69,5 +91,4 @@ def is_youtube(link: str) -> bool:
     """
 
     host = urlparse(link).hostname
-
     return host == "www.youtube.com"

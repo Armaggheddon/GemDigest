@@ -1,3 +1,11 @@
+"""This module provides a logging setup function to configure a logger
+    for the application. The logger outputs messages to a file located 
+    in the 'log' directory, with the log file named based on the current 
+    year and month.
+
+Functions:
+    setup_logger: Configures and returns a logger for logging messages.
+"""
 import os
 import logging
 from datetime import datetime

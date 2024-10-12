@@ -1,3 +1,12 @@
+"""This module contains the handler for the /help command in a Telegram bot. 
+    When a user invokes the /help command, it sends a message listing the 
+    available commands to the user.
+
+Functions:
+    handle_help_command(message: Message, bot: AsyncTeleBot) -> None: 
+    Handles the /help command by sending a list of available commands to 
+    the user.
+"""
 from enum import Enum
 
 from telebot.async_telebot import AsyncTeleBot
