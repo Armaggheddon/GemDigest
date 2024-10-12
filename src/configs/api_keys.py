@@ -1,6 +1,16 @@
+"""This module provides functions to retrieve API keys and user IDs
+    from environment variables. Each function retrieves a specific 
+    environment variable required for application configuration.
+
+Functions:
+    get_gemini_api_key: Retrieves the GEMINI_API_KEY from environment variables.
+    get_telegram_api_key: Retrieves the TELEGRAM_API_KEY from environment variables.
+    get_admin_user_id: Retrieves the ADMIN_USER_ID from environment variables.
+    
+# TODO: rename this file to a more appropriate name
+"""
 import os
 
-# TODO: rename this file to a more appropriate name
 
 def get_gemini_api_key():
     """Retrieves the GEMINI_API_KEY from environment variables.

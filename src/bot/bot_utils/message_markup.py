@@ -1,3 +1,11 @@
+"""This module provides functionality to create Telegram inline keyboard 
+    markups for interacting with users. It includes a function to generate 
+    an inline button that links to an article.
+
+Functions:
+    generate_article_button_markup: Generates an inline keyboard markup 
+    with a button linking to the article.
+"""
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 

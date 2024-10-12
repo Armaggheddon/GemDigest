@@ -1,3 +1,13 @@
+"""This module contains functions to parse JSON responses from the Gemini API.
+
+It specifically handles the extraction of values from a JSON-like string 
+format, removing unnecessary quotes, and mapping the values to the expected 
+keys as defined in the provided format.
+
+The main function, `parse_gemini_json`, takes a response string and a format 
+mapping to return a structured output in the form of a 
+`GeminiOutputFormat` object.
+"""
 import io
 from typing import Mapping, Any, List
 from .types import GeminiOutputFormat
@@ -7,7 +17,19 @@ def parse_gemini_json(
     response_text: str, 
     format: Mapping[str, Any]
 ) -> GeminiOutputFormat:
+    """Parses a JSON response from the Gemini format into a GeminiOutputFormat 
+        object.
 
+    Args:
+        response_text (str): The JSON string response from Gemini.
+        format (Mapping[str, Any]): A mapping that defines the expected keys.
+
+    Returns:
+        GeminiOutputFormat: An object populated with the parsed values.
+
+    Raises:
+        ValueError: If the response_text does not contain valid JSON format.
+    """
     expected_keys = list(format.__annotations__.keys())
 
     # start from the first quote

@@ -1,12 +1,28 @@
+"""
+This module provides functions to format and parse Gemini API responses.
+
+It includes functionality to:
+- Format raw Gemini API responses into structured HTML output, including title, 
+    summary, and image links.
+- Parse and handle markdown-style text and code blocks.
+- Build HTML components from the parsed response.
+
+Functions:
+    format_gemini_response: Formats the raw Gemini API response into a 
+        structured output.
+    _title_builder: Formats a title as bold text after removing markdown symbols.
+    _summary_builder: Converts markdown text into HTML, handling code blocks.
+    _image_builder: Builds an HTML anchor tag linking to an image URL.
+    _markup_to_html_parser: Converts markdown-style formatting to HTML.
+    split_markdown_code: Splits markdown content into plain text and code blocks.
+"""
 import re
-import logging
 import itertools
 from io import StringIO
 from typing import Mapping, Any, List, Tuple
 
 from .json_parser import parse_gemini_json
 from .types import GeminiOutputFormatTemplate
-
 
 
 def format_gemini_response(

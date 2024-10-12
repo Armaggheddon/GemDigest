@@ -1,3 +1,16 @@
+"""This module contains the implementation for handling messages that contain 
+    URLs in a Telegram bot. It includes an enumeration for message templates 
+    and an asynchronous function to process incoming messages, extract URLs, 
+    crawl them for content, and respond to the user with generated text and 
+    links to articles.
+
+Classes:
+    Messages: An enumeration class for defining template messages used by the bot.
+
+Functions:
+    handle_link_message(message: Message, bot: AsyncTeleBot) -> None:
+        Handles messages containing URLs by extracting and processing the links.
+"""
 from enum import Enum
 from typing import List
 
