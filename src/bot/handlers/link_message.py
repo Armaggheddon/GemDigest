@@ -11,7 +11,6 @@ Functions:
     handle_link_message(message: Message, bot: AsyncTeleBot) -> None:
         Handles messages containing URLs by extracting and processing the links.
 """
-from enum import Enum
 from typing import List
 
 from telebot.async_telebot import AsyncTeleBot
@@ -22,47 +21,6 @@ from gemini import GeminiAPIClient, GeminiResponse
 from utils import link_utils
 
 from ..bot_utils import message_markup
-
-
-class Messages(Enum):
-    """An enumeration class that contains template messages used by the bot.
-
-    This class defines various message templates for different bot responses. 
-    The `START_TEMPLATE` is a welcome message template that can be personalized 
-    with a user's name. The `format` method allows for dynamic content insertion 
-    into the message templates using string formatting.
-
-    Attributes:
-        START_TEMPLATE (str): A template message sent when a user starts 
-            interacting with the bot, personalized with the user's first name.
-
-    Methods:
-        format(*args, **kwargs) -> str:
-            Formats the message template with the provided keyword arguments.
-            This is used to inject dynamic content (e.g., user names) into the 
-            message template.
-    """
-    START_TEMPLATE = ("""
-        Hello %(user_name)! I'm a bot that can generate text based on your prompt.
-        Just send me a message with your prompt and I'll generate a response for you.
-        """)
-    
-    def format(self, *args, **kwargs) -> str:
-        """Formats the message template with the given keyword arguments.
-
-        Args:
-            *args: Additional positional arguments (not used in this method).
-            **kwargs: Keyword arguments used for formatting the message template. 
-                      For example, `user_name` can be passed to personalize the 
-                      START_TEMPLATE message.
-
-        Returns:
-            str: The formatted message with the dynamic content inserted.
-
-        Example:
-            formatted_message = Messages.START_TEMPLATE.format(user_name="John")
-        """
-        return self.value % kwargs
     
 
 async def handle_link_message(message: Message, bot: AsyncTeleBot) -> None:
@@ -102,3 +60,30 @@ async def handle_link_message(message: Message, bot: AsyncTeleBot) -> None:
                 result.original_url
                 )
         )
+
+
+async def handle_no_link_message(message: Message, bot: AsyncTeleBot) -> None:
+    """Handles messages that do not contain any URLs.
+
+    This asynchronous function replies to the user with a message indicating 
+    that no URLs were found in the incoming message.
+
+    Args:
+        message (Message): The incoming Telegram message without any URLs.
+        bot (AsyncTeleBot): The bot instance used to send the reply message.
+
+    Returns:
+        None: This function does not return a value.
+    """
+
+    no_link_message = (
+        "Oops\\! 🤖 It looks like there's no link in your message\\." 
+        "📭 Drop a link and let me work my magic\\! ✨"
+    )
+
+    await bot.reply_to(
+        message,
+        no_link_message,
+        parse_mode="markdownv2",
+        disable_notification=True
+    )

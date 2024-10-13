@@ -76,6 +76,7 @@ def register_handlers(bot: AsyncTeleBot) -> None:
     """
     _filter_link = {filters.LinkFilter.key: True}
     _filter_admin = {filters.AdminFilter.key: True}
+
     _filter_link_admin = {**_filter_link, **_filter_admin}
 
 
@@ -88,10 +89,14 @@ def register_handlers(bot: AsyncTeleBot) -> None:
 
     bot.register_message_handler(
         link_message.handle_link_message,
-        content_types=['text'],
-        func=lambda msg: link_utils.has_url(msg.text),
         pass_bot=True,
         **_filter_link_admin
+    )
+
+    bot.register_message_handler(
+        link_message.handle_no_link_message,
+        pass_bot=True,
+        **_filter_admin
     )
 
     bot.register_message_handler(
