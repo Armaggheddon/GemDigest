@@ -19,45 +19,8 @@ from telebot.types import Message
 
 from gemini import GeminiAPIClient
 
-CMD = "tokens"
 
-
-class Messages(Enum):
-    """An enumeration class that contains template messages used by the bot.
-
-    This class defines various message templates for different bot responses. 
-    The `TOKENS_TEMPLATE` is a message template used to display token counts.
-
-    Attributes:
-        TOKENS_TEMPLATE (str): A template message displaying various 
-            token counts.
-
-    Methods:
-        format(*args) -> str:
-            Formats the message template with the provided arguments for 
-                token counts.
-    """
-    TOKENS_TEMPLATE = (
-        "Last input token count: {}\n"
-        "Last output token count: {}\n"
-        "Total input token count: {}\n"
-        "Total output token count: {}\n"
-        )
-    
-    def format(self, *args) -> str:
-        """Formats the message template with the provided arguments.
-
-        Args:
-            *args: Arguments used for formatting the message template.
-
-        Returns:
-            str: The formatted message with the token counts inserted.
-
-        Example:
-            formatted_message = Messages.TOKENS_TEMPLATE.format(10, 20, 100, 200)
-        """
-        return self.value.format(*args)
-    
+CMD = "tokens"    
 
 async def handle_tokens_command(message: Message, bot: AsyncTeleBot) -> None:
     """Handles the /tokens command for the bot.
@@ -79,9 +42,23 @@ async def handle_tokens_command(message: Message, bot: AsyncTeleBot) -> None:
         User sends `/tokens`, and the bot replies with the token usage 
             statistics.
     """
+
+
     token_count = GeminiAPIClient.get_used_tokens()
-    response_message = Messages.TOKENS_TEMPLATE.format(
-        *astuple(token_count)
+    # response_message = message_template % astuple(token_count)
+    total_tokens_used = (token_count.total_input_token_count 
+        + token_count.total_output_token_count)
+    
+    response_message = (
+        "Here's the token breakdown\\! 🧮✨\n\n"
+        f"\\- Last input: *{token_count.last_input_token_count}* tokens 📝\n"
+        f"\\- Last output: *{token_count.last_output_token_count}* tokens 🗣️\n"
+        f"\\- Total input: *{token_count.total_input_token_count}* tokens 💻\n"
+        f"\\- Total output: *{token_count.total_output_token_count}* tokens 🔊\n"
+        f"\\- Total tokens used: *{total_tokens_used}* tokens 🚀\n"
     )
 
-    await bot.send_message(message.chat.id, response_message)
+    await bot.send_message(
+        message.chat.id, 
+        response_message, 
+        parse_mode="markdownv2")

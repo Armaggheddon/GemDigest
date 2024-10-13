@@ -22,10 +22,17 @@ async def handle_help_command(message: Message, bot: AsyncTeleBot) -> None:
         bot (AsyncTeleBot): The bot instance used to send the response.
     """
     help_message = (
-        "Here are the available commands 📒:\n"
-        "/help - Display the list of available commands\n"
-        "/tokens - Display the number of tokens used by the Gemini API\n"
-        "message containing a URL - Extract and process URLs from the message\n" 
+        "👋 Hey there\\!\n" 
+        "🤖 Here's what I can do for you:\n\n"
+        "\\-/help : You're already here\\! 📚\n\n"
+        "\\- /tokens : I'll show you how many tokens we've crunched through so far\\! 📊\n\n"
+        "\\- /info : Check out the current Gemini model settings I'm running on\\! 🧠✨\n\n"
+        "\\- Just send me a message with one or more links\\!\n\n"
+        "I'll fetch the goods and summarize it for you\\! 🔗📋\n"
+        "Need anything else\\? Just ask\\! 😎"
     )
 
-    await bot.send_message(message.chat.id, help_message)
+    await bot.send_message(
+        message.chat.id, 
+        help_message, 
+        parse_mode="markdownv2")
