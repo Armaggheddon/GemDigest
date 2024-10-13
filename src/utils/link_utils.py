@@ -92,3 +92,15 @@ def is_youtube(link: str) -> bool:
 
     host = urlparse(link).hostname
     return host == "www.youtube.com"
+
+
+def add_https_prefix(url: str) -> str:
+    """
+    Add the HTTP prefix to a URL if it does not have one.
+    """
+
+    # just needs to check first 8 characters
+    if not url.startswith(("http://", "https://"), start=0, end=8):
+        return "https://" + url
+
+    return url

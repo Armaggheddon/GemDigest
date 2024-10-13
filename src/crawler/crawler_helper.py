@@ -77,6 +77,11 @@ async def crawl_urls(
     if isinstance(urls, str):
         urls = [urls]
 
+    # check that all the urls have the http/https prefix
+    # TODO: could be that https version of website does not exist,
+    # a retry logic should be considered to retry with http version
+    urls = [link_utils.add_https_prefix(url) for url in urls]
+
     return await _crawl_urls(tuple(urls), result_attribute, verbose)
 
 
