@@ -6,12 +6,12 @@ Classes:
     LinkFilter: A custom filter that checks if a message contains a URL.
 """
 from telebot.types import Message
-from telebot.asyncio_filters import AdvancedCustomFilter
+from telebot.asyncio_filters import SimpleCustomFilter
 
 from utils import link_utils
 
 
-class LinkFilter(AdvancedCustomFilter):
+class LinkFilter(SimpleCustomFilter):
     """Custom filter to check if a message contains a URL.
 
     This filter uses the `link_utils` module to determine whether the 
@@ -28,7 +28,7 @@ class LinkFilter(AdvancedCustomFilter):
     key="has_url"
 
     @staticmethod
-    async def check(message: Message, text: str) -> bool:
+    async def check(message: Message) -> bool:
         """Checks if the provided message contains a URL.
 
         Args:

@@ -75,26 +75,17 @@ def register_handlers(bot: AsyncTeleBot) -> None:
             the handler functions.
     """
     _filter_link = {filters.LinkFilter.key: True}
+    _filter_no_link = {filters.LinkFilter.key: False}
     _filter_admin = {filters.AdminFilter.key: True}
 
     _filter_link_admin = {**_filter_link, **_filter_admin}
+    _filter_no_link_admin = {**_filter_no_link, **_filter_admin}
 
-
+    # handlers are registered in order, therefore the most specific handlers
+    # should be registered first
     bot.register_message_handler(
         start_command.handle_start_command,
         commands=[start_command.CMD],
-        pass_bot=True,
-        **_filter_admin
-    )
-
-    bot.register_message_handler(
-        link_message.handle_link_message,
-        pass_bot=True,
-        **_filter_link_admin
-    )
-
-    bot.register_message_handler(
-        link_message.handle_no_link_message,
         pass_bot=True,
         **_filter_admin
     )
@@ -118,6 +109,18 @@ def register_handlers(bot: AsyncTeleBot) -> None:
         commands=[help_command.CMD],
         pass_bot=True,
         **_filter_admin
+    )
+
+    bot.register_message_handler(
+        link_message.handle_link_message,
+        pass_bot=True,
+        **_filter_link_admin
+    )
+
+    bot.register_message_handler(
+        link_message.handle_no_link_message,
+        pass_bot=True,
+        **_filter_no_link_admin
     )
 
 
