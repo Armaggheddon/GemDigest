@@ -7,8 +7,6 @@ Functions:
     Handles the /help command by sending a list of available commands to 
     the user.
 """
-from enum import Enum
-
 from telebot.async_telebot import AsyncTeleBot
 from telebot.types import Message
 

@@ -1,19 +1,12 @@
 """This module contains the implementation for handling the /tokens command in 
-    a Telegram bot. It includes an enumeration for message templates and an 
-    asynchronous function to process the /tokens command, sending the token 
-    counts to the user.
-
-Classes:
-    Messages: An enumeration class for defining message templates used by the bot.
+    a Telegram bot. It an asynchronous function to process the /tokens command,
+    sending the token counts to the user.
 
 Functions:
     handle_tokens_command(message: Message, bot: AsyncTeleBot) -> None:
         Handles the /tokens command by sending the token usage statistics 
-            to the user.
+        to the user.
 """
-from enum import Enum
-from dataclasses import astuple
-
 from telebot.async_telebot import AsyncTeleBot
 from telebot.types import Message
 
