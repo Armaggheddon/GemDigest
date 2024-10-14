@@ -23,8 +23,8 @@ def get_gemini_api_key():
     """
     try:
         return os.environ["GEMINI_API_KEY"]
-    except RuntimeError as e:
-        raise RuntimeError("GEMINI_API_KEY environment variable not set")
+    except KeyError as e:
+        raise KeyError("GEMINI_API_KEY environment variable not set")
 
 
 def get_telegram_api_key():
@@ -38,8 +38,8 @@ def get_telegram_api_key():
     """
     try:
         return os.environ["TELEGRAM_API_KEY"]
-    except RuntimeError as e:
-        raise RuntimeError("TELEGRAM_API_KEY environment variable not set")
+    except KeyError as e:
+        raise KeyError("TELEGRAM_API_KEY environment variable not set")
     
 
 def get_admin_user_id():
@@ -52,6 +52,10 @@ def get_admin_user_id():
         RuntimeError: If the ADMIN_USER_ID environment variable is not set.
     """
     try:
-        return int(os.environ["ADMIN_USER_ID"])
-    except RuntimeError as e:
-        raise RuntimeError("ADMIN_USER_ID environment variable not set")
+        admin_users = os.environ["ADMIN_USER_ID"]
+        admin_list = admin_users.split(";")
+
+        return [int(admin.strip()) for admin in admin_list]
+
+    except KeyError as e:
+        raise KeyError("ADMIN_USER_ID environment variable not set")
