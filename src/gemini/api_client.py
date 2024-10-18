@@ -1,3 +1,37 @@
+"""This module defines the GeminiAPIClient class, responsible for interacting 
+with the Gemini model to generate text responses based on prompts. The client 
+uses the Google Gemini API for text generation and handles retries and token 
+counting. It provides static methods for retrieving model information 
+and token usage, as well as generating text with optional formatting.
+
+GeminiAPIClient:
+    This class implements a singleton design pattern to ensure that only one 
+        instance of the client is used across the application. The client is 
+        used to configure the model and manage text generation requests.
+
+Static Methods:
+    - get_used_tokens: Retrieves the total input and output tokens used by 
+        the model.
+    - get_model_info: Returns the model's configuration details such as name, 
+        temperature, top-p, top-k, and max tokens.
+    - generate_text: Generates a response based on a given prompt and supports 
+        retries on failures.
+
+Instance Methods:
+    - _generate_text_with_retry: Handles retries for text generation in 
+        case of API errors.
+    - _generate_text: Generates text asynchronously using the Gemini model 
+        and handles token counting.
+
+Error Handling:
+    - Handles GoogleAPIError for issues during API calls.
+    - Logs ValueErrors for issues like parsing JSON responses.
+    - Implements retries with an exponential backoff in case of failures.
+
+Caching:
+    - The generate_text method is cached to avoid redundant requests for 
+        identical prompts within a specified time window.
+"""
 import logging
 import asyncio
 from typing import Optional
@@ -18,11 +52,34 @@ from .types import (
 
 
 class GeminiAPIClient():
-    
+    """A client for interacting with the Google Gemini API to generate text 
+    based on prompts. The client is a singleton that ensures only one instance 
+    is used across the application.
+
+    Attributes:
+        model_info (GeminiModelInfo): Contains details about the current 
+            model configuration.
+        token_count (GeminiTokenCount): Keeps track of input and output tokens 
+            for the API usage.
+        model (GenerativeModel): The instance of the generative model used to 
+            generate text.
+
+    Methods:
+        get_used_tokens: Returns the token counts used by the model.
+        get_model_info: Returns the model information.
+        generate_text: Generates a response based on a given prompt.
+    """
     _instance: Optional['GeminiAPIClient'] = None
     
-    def __init__(self, api_key: str) -> None:
 
+    def __init__(self, api_key: str) -> None:
+        """Initializes the GeminiAPIClient with the given API key and 
+            configures the model.
+
+        Args:
+            api_key (str): The API key for authenticating requests to 
+                the Gemini API.
+        """
         generation_config = genai.GenerationConfig(
             candidate_count=1,
             temperature=1,
@@ -52,8 +109,12 @@ class GeminiAPIClient():
 
         self.token_count = GeminiTokenCount()
 
+
     @staticmethod
     def _touch_instance():
+        """Ensures that the GeminiAPIClient singleton instance is initialized 
+            (lazy loading).
+        """
         # Creates a new instance if not already
         # exists.
         # Has a "lazy loading" like behavior
@@ -61,19 +122,34 @@ class GeminiAPIClient():
             GeminiAPIClient._instance = GeminiAPIClient(
                 api_keys.get_gemini_api_key())
     
+
     @staticmethod
     def get_used_tokens() -> GeminiTokenCount:
+        """Returns the total input and output token counts for the API usage.
+
+        Returns:
+            GeminiTokenCount: A dataclass that includes both input and output 
+                token counts.
+        """
         # TODO: add dataclass that includes 
         # both input and output tokens
         GeminiAPIClient._touch_instance()
         
         return GeminiAPIClient._instance.token_count
     
+
     @staticmethod
     def get_model_info():
+        """Returns the configuration details of the current model.
+
+        Returns:
+            GeminiModelInfo: A dataclass containing the model's name, 
+                temperature, top-p, top-k, and max tokens.
+        """
         GeminiAPIClient._touch_instance()
         return GeminiAPIClient._instance.model_info
     
+
     @lru_cache_with_age(max_size=1000)
     @staticmethod
     async def generate_text(
@@ -81,6 +157,20 @@ class GeminiAPIClient():
         format: bool = True,
         max_retries: int = 2
     ) -> GeminiResponse:
+        """
+        Generates a response based on the provided prompt.
+
+        Args:
+            prompt (str): The input text prompt for generating a response.
+            format (bool, optional): Whether to format the response using 
+                the formatter. Defaults to True.
+            max_retries (int, optional): The maximum number of retry attempts 
+                in case of failures. Defaults to 2.
+
+        Returns:
+            GeminiResponse: The generated text or an error message in case 
+                of failure.
+        """
         # Public facing method that can be used to 
         # interact without having to manage a class
         # instance
@@ -95,6 +185,19 @@ class GeminiAPIClient():
         format: bool, 
         max_retries: int = 2
     ) -> GeminiResponse:
+        """Attempts to generate text, retrying if the API call fails, up 
+            to a maximum number of retries.
+
+        Args:
+            prompt (str): The input text prompt.
+            format (bool): Whether to format the generated response.
+            max_retries (int, optional): The maximum number of retry attempts. 
+                Defaults to 2.
+
+        Returns:
+            GeminiResponse: The generated text or an error message if retries 
+                are exhausted.
+        """
         retries = 0
         _last_result: GeminiResponse | None = None
         while retries < max_retries:
@@ -123,7 +226,16 @@ class GeminiAPIClient():
         prompt: str,
         format: bool,
     ) -> GeminiResponse:        
+        """Generates text asynchronously using the Gemini model, updates 
+            token counts, and optionally formats the response.
 
+        Args:
+            prompt (str): The input text prompt.
+            format (bool): Whether to format the generated response.
+
+        Returns:
+            GeminiResponse: The generated text or an error message.
+        """
         # Use generate_content instead of 
         # chat_session since we are not
         # interacting with the model in a
