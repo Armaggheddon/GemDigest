@@ -12,7 +12,7 @@ Functions:
 import os
 
 
-def get_gemini_api_key():
+def get_gemini_api_key() -> str:
     """Retrieves the GEMINI_API_KEY from environment variables.
 
     Returns:
@@ -27,7 +27,7 @@ def get_gemini_api_key():
         raise KeyError("GEMINI_API_KEY environment variable not set")
 
 
-def get_telegram_api_key():
+def get_telegram_api_key() -> str:
     """Retrieves the TELEGRAM_BOT_TOKEN from environment variables.
 
     Returns:
@@ -42,7 +42,7 @@ def get_telegram_api_key():
         raise KeyError("TELEGRAM_API_KEY environment variable not set")
     
 
-def get_admin_user_id():
+def get_admin_user_ids() -> list[int]:
     """Retrieves the ADMIN_USER_ID from environment variables.
 
     Returns:
