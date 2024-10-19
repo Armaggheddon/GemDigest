@@ -46,8 +46,10 @@
     Whether you’re chatting one-on-one or in a group, GemDigest works seamlessly in the background. We all have that friend who loves to share links to articles and websites, but let’s face it—sometimes there’s just not enough time to read them all. With GemDigest, simply paste the link into the chat, and the bot will automatically generate a summary for you, saving you time and energy. No extra commands to memorize, no complicated steps involved—just share the link, and let the magic happen! 🧙‍♂️✨ The bot will recognize the links and reply with a summary, while ignoring any non-link messages to keep your conversations flowing smoothly. 💬🔗
 </p>
 <br/>
-<!-- I will change this image when I run the bot to extrapolate an example -->
-<img src="https://github.githubassets.com/images/modules/site/social-cards/github-social.png">
+<p align="center">
+    <img src="cover.png">
+</p>
+
 <br/>
 <br/>
 <h3 align="center">Customize Your Experience 🎯</h3>
@@ -55,7 +57,9 @@
     As an added feature, you can even specify which people you want the bot to focus on. This way, GemDigest will summarize only the links sent by specific users and ignore others—perfect for group chats where only certain recommendations matter to you! 👥📲
 </p>
 <br/>
-<img src="https://www.muycomputer.com/wp-content/uploads/2016/04/google-telegram.jpg">
+<p align="center">
+    <img src="https://www.muycomputer.com/wp-content/uploads/2016/04/google-telegram.jpg">
+</p>
 <br/>
 <br/>
 <h3 align="center">Powered by Google Gemini 🚀</h3>
@@ -83,10 +87,10 @@
 
 <h2 id="documentation"><br/><br/>📚  Documentation</h2>
 <p>
-    Including pieces of documentation will allow you to better understand what the program does. At this point it is best to write only short portions.
+    Here you can find the documentation for the GemDigest bot. This documentation provides detailed information on how to use and the different commands and options available to users. It also includes installation instructions, prerequisites, and other essential details to help you get started with the bot.
 </p>
 <p>
-    For a broader view it is better to refer the user to the documentation via links: <a href="https://shields.io/">Documentation »</a>
+    You can find all the informations at: <a href="docs.md">Documentation »</a>
 </p>
 
 
@@ -95,44 +99,106 @@
 
 <h2 id="prerequisites"><br/>🧰  Prerequisites</h2>
 <p>
-    This is an example of how to list the things needed to use the software and how to install them.
+    The GemDigest bot can be installed in several ways:
+    <ul>
+        <li>Directly using Python with <code>venv</code> and <code>pip</code></li>
+        <li>With Docker</li>
+        <li>Using Docker Compose</li>
+    </ul>
+    Additionally, if you are using <a href="https://casaos.zimaspace.com"><strong>CasaOS</strong></a>, you can easily install the precompiled build by using the  <a href="https://github.com/Armaggheddon/GemDigest/blob/main/casaos-docker-compose.yml"><code>casaos-docker-compose.yml</code></a> file provided. This option simplifies the setup, particularly for users of CasaOS who want a streamlined installation process.
 </p>
-
-```
-Pre-requisites section
-```
+<p>
+    Before proceeding with the installation, there are a few prerequisites you will need:
+    <ul>
+        <li><strong>A Telegram bot token</strong>. You can obtain this token by contacting <a href="https://telegram.me/BotFather" target="_blank">@BotFather</a> on Telegram and following the instructions. This token is essential for enabling the bot's communication through Telegram.</li>
+        <li><strong>A Google Gemini API key</strong>. This key is necessary for the bot to access and process data using Google Gemini's services. You can obtain the key by creating one through the following link: <a href="https://aistudio.google.com/app/apikey" target="_blank">Google Gemini API Key</a>. Note that there is a free version available with certain limitations, but it should be sufficient for the bot's basic functionalities.</li>
+    </ul>
+</p>
+<p>
+    If you plan to run the bot with Python or Docker (outside of CasaOS), you'll need to ensure that both <strong>Python</strong> and <strong>Docker</strong> are installed on your system. Python will be used for executing the bot's code and managing dependencies, while Docker allows for containerized deployment, simplifying the environment setup.
+</p>
+<p>
+    For CasaOS users, these additional prerequisites are not required since the platform handles much of the complexity internally, offering a smoother installation experience.
+</p>
+<p>
+    Once you have these prerequisites ready, you can proceed with the installation method that best suits your environment. Whether you prefer running the bot locally with Python, inside a container with Docker, or using CasaOS for an even simpler setup, the flexibility of this bot ensures it can fit your needs.
+</p>
 
 <p align="right"><a href="#top">⇧</a></p>
 
 
 <h2 id="how-to-start"><br/>⚙️  How to Start</h2>
 <p>
-    Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services.
+    Based on the prerequisites you have, you can choose the installation method that best suits your needs. Below are the steps for setting up the GemDigest bot using Python, Docker, Docker Compose, or CasaOS. Follow the instructions for the method you prefer to get the bot up and running quickly.
 </p>
-<br/>
 
+<h3> <img src="https://brandslogos.com/wp-content/uploads/images/large/python-logo.png" width="15"> Python </h3>
 
-1. Get a free API Key  <a href="https://example.com">here</a>
-2. Clone the repo
+1. Clone the repo
   
-```sh
-git clone https://github.com/your_username_/Project-Name.git
-```
+    ```bash
+    git clone https://github.com/Armaggheddon/GemDigest.git
+    ```
 
-3. Install NPM packages
-  
-```sh
-npm install
-```
+2. enter the directory
 
-4. Enter your API in `config.js`
-  
-```js
-const API_KEY = 'ENTER YOUR API';
-```
+    ```bash
+    cd GemDigest
+    ```
+
+3. Create the Venv and Install the dependencies
+    
+    ```bash
+    python3 -m venv env
+    source venv/bin/activate
+    pip install -r requirements.txt
+    ```
+
+4. Install Playwright and dependencies
+
+    ```bash
+    pip install --no-cache-dir playwright && playwright install && playwright install-deps
+    ```
+
+5. Add the API Keys to the environment variables
+
+    ```bash
+    export TELEGRAM_API_KEY=YOUR_TELEGRAM_API_KEY
+    export GEMINI_API_KEY=YOUR_GEMINI_API_KEY
+    export ADMIN_ID=YOUR_ADMIN_ID
+    ```
+
+    For example:
+    
+    ```bash
+    export TELEGRAM_API_KEY=1234567890:ABCDEF
+    export GEMINI_API_KEY=1234567890:ABCDEF
+    # If you have more than one admin, separate the IDs with a ";"
+    export ADMIN_ID=1234;5678
+    ```
+
+
+<h3> <img src="https://tech.osteel.me/images/2020/03/04/docker-introduction-02.png" width="20"> Docker </h3>
+
+<h3> <img src="https://openwhisk.apache.org/images/deployments/logo-docker-compose-notext.png" width="20"> Docker Compose </h3>
+
+
+<h3> <img src="https://storage.yandexcloud.net/products/f2e3n595vqa179mqavo0.svg" width="18"> CasaOS </h3>
+<ul>
+    <li>Download <code>GemDigest</code> from the Store</li>
+    <li>Open the Settings of the app</li>
+    <li>Add your <code>Telegram API Key</code>, <code>Gemini API Key</code> and the <code>Admin ID</code> (If you have more user add the diferent ID's separated by a <code>";"</code>)</li>
+</ul>
+<!-- <ul>
+    <li>Open your casaOS page and go to the <code>+</code></li>
+    <li>Click on <code>Install a costumized app</code></li>
+    <li>Click on the <code>import</code> icon (on the top right)</li>
+    <li>Drag and Drop the <a href="https://github.com/Armaggheddon/GemDigest/blob/main/casaos-docker-compose.yml"><code>casaos-docker-compose.yml</code></a> file</li>
+    <li>Click on <code>Submit</code></li>
+    <li>Add your <code>Telegram API Key</code>, <code>Gemini API Key</code> and the <code>Admin ID</code> (If you have more user add the diferent ID's separated by a <code>";"</code>)</li>
+</ul> -->
 
 <p align="right"><a href="#top">⇧</a></p>
-
 
 ---
 
