@@ -10,7 +10,6 @@ Functions:
     handle_no_link_message(message: Message, bot: AsyncTeleBot) -> None:
         Handles messages that do not contain any URLs.
 """
-from typing import List
 
 from telebot.async_telebot import AsyncTeleBot
 from telebot.types import Message
@@ -40,9 +39,16 @@ async def handle_link_message(message: Message, bot: AsyncTeleBot) -> None:
     Returns:
         None: This function does not return a value.
     """
+
+    # show GemDigest is typing on the chat top bar
+    await bot.send_chat_action(message.chat.id, "typing")
+
+    # TODO: add automatic addition of 'https://' to URLs without a scheme
     urls = link_utils.extract_urls(message.text)
+
+    urls = filter(lambda x: not link_utils.is_youtube(x), urls)
             
-    scrape_results: List[ScrapeResult] = await crawl_urls(urls)
+    scrape_results: list[ScrapeResult] = await crawl_urls(urls)
     
     for result in scrape_results:
         prompt = result.content + "\n\n" + "\n".join(result.sub_urls)

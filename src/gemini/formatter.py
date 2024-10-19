@@ -19,7 +19,7 @@ Functions:
 import re
 import itertools
 from io import StringIO
-from typing import Mapping, Any, List, Tuple
+from typing import Mapping, Any
 
 from .json_parser import parse_gemini_json
 from .types import GeminiOutputFormatTemplate
@@ -146,7 +146,7 @@ def _markup_to_html_parser(text: str) -> str:
     return text
 
 
-def split_markdown_code(text: str) -> Tuple[List[str], List[tuple[str, str]]]:
+def split_markdown_code(text: str) -> tuple[list[str], list[tuple[str, str]]]:
     """Splits markdown content into plain text and code blocks.
 
     Args:

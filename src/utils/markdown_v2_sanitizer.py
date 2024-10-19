@@ -1,4 +1,3 @@
-from typing import List
 
 def sanitize_code(text: str) -> str:
     """
@@ -45,7 +44,7 @@ def sanitize_float(number: float) -> str:
     return sanitize_str(f"{number:.2f}")
 
 
-def _base_sanitize(text: str, excape_chars: List[str]) -> str:
+def _base_sanitize(text: str, excape_chars: list[str]) -> str:
     """
     Sanitize a string of text by escaping specified characters.
 

@@ -5,8 +5,6 @@
 Classes:
     AdminFilter: A custom filter that checks if the user is an admin.
 """
-from typing import Union, List
-
 from telebot.types import Message
 from telebot.asyncio_filters import SimpleCustomFilter
 
@@ -27,9 +25,9 @@ class AdminFilter(SimpleCustomFilter):
         user ID of the message sender matches the admin user ID.
     """
     key: str = "admin_filter"
-    admin_user_ids: List[int] = 0
+    admin_user_ids: list[int] = 0
 
-    def __init__(self, admin_user_id: Union[int, List[int]]):
+    def __init__(self, admin_user_id: int | list[int]):
         """Initializes the AdminFilter with the admin user ID.
 
         Args:

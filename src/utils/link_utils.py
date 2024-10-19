@@ -17,7 +17,6 @@ Imports:
     - re: For using regular expressions to find URLs.
     - urlparse (from urllib.parse): To parse and check URL components.
 """
-from typing import List
 import re
 from urllib.parse import urlparse
 
@@ -47,7 +46,7 @@ def has_url(text: str) -> bool:
     return False
     
 
-def extract_urls(text: str) -> List[str]:
+def extract_urls(text: str) -> list[str]:
     """
     Extracts all URLs from the given text.
 

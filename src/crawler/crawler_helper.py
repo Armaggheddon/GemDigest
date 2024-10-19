@@ -18,7 +18,6 @@ Functions:
 import asyncio
 import logging
 from enum import Enum
-from typing import Union, List, Tuple
 from dataclasses import dataclass
 
 from crawl4ai import AsyncWebCrawler
@@ -44,17 +43,17 @@ class ScrapeResult():
         original_url (str): The original URL that was crawled.
     """
     content: str
-    sub_urls: List[str]
+    sub_urls: list[str]
     original_url: str
     
 
 # This function is a wrapper around the _crawl_urls function
 # that allows for the caching of the results of the crawl
 async def crawl_urls(
-    urls: Union[str, List[str]], 
+    urls: str | list[str], 
     result_attribute: ResultAttributes = ResultAttributes.MARKDOWN, 
     verbose=True
-    ) -> List[ScrapeResult]:
+    ) -> list[ScrapeResult]:
     """Asynchronously crawls the specified URLs and returns the scraping 
         results.
 
@@ -87,10 +86,10 @@ async def crawl_urls(
 
 @lru_cache_with_age(max_size=1000)
 async def _crawl_urls(
-    urls: Tuple[str], 
+    urls: tuple[str], 
     result_attribute: ResultAttributes = ResultAttributes.MARKDOWN, 
     verbose=True
-    ) -> List[ScrapeResult]:
+    ) -> list[ScrapeResult]:
     """Crawls the specified URLs asynchronously and returns the scraping results.
 
     This function performs the actual crawling of the URLs, caching 

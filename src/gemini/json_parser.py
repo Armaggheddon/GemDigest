@@ -9,7 +9,7 @@ mapping to return a structured output in the form of a
 `GeminiOutputFormat` object.
 """
 import io
-from typing import Mapping, Any, List
+from typing import Mapping, Any
 from .types import GeminiOutputFormat
 
 
@@ -36,7 +36,7 @@ def parse_gemini_json(
     start = response_text.find("\"")
     curr_pos = start
     delimiter_count = 0
-    tokens: List[str] = []
+    tokens: list[str] = []
 
     # split based on the quotes while keeping the quotes
     while curr_pos < len(response_text):
