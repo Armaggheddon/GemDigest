@@ -20,16 +20,17 @@ import logging
 
 from telebot.async_telebot import AsyncTeleBot
 from telebot import ExceptionHandler
+from telebot.util import update_types
 
 from configs import api_keys
-from utils import link_utils
 
 from .handlers import (
     start_command,
     link_message,
     tokens_command,
     help_command,
-    info_command
+    info_command,
+    chat_actions
 )
 
 from . import filters
@@ -49,8 +50,9 @@ def register_custom_filters(bot: AsyncTeleBot) -> None:
         The admin filter uses the admin user ID from the API keys 
         configuration.
     """
-    bot.add_custom_filter(filters.AdminFilter(api_keys.get_admin_user_id()))
+    bot.add_custom_filter(filters.AdminFilter(api_keys.get_admin_user_ids()))
     bot.add_custom_filter(filters.LinkFilter())
+    bot.add_custom_filter(filters.PrivateChatFilter())
 
 
 def register_handlers(bot: AsyncTeleBot) -> None:
@@ -77,9 +79,17 @@ def register_handlers(bot: AsyncTeleBot) -> None:
     _filter_link = {filters.LinkFilter.key: True}
     _filter_no_link = {filters.LinkFilter.key: False}
     _filter_admin = {filters.AdminFilter.key: True}
+    _filter_private_chat = {filters.PrivateChatFilter.key: True}
+    _filter_not_private_chat = {filters.PrivateChatFilter.key: False}
 
-    _filter_link_admin = {**_filter_link, **_filter_admin}
+    _filter_link_admin_private_chat = {
+        **_filter_link, **_filter_admin, **_filter_private_chat}
     _filter_no_link_admin = {**_filter_no_link, **_filter_admin}
+    _filter_no_link_private_chat_admin = {
+        **_filter_no_link_admin, **_filter_private_chat}
+    _filter_link_not_private_chat = {
+        **_filter_link, **_filter_not_private_chat
+    }
 
     # handlers are registered in order, therefore the most specific handlers
     # should be registered first
@@ -111,17 +121,50 @@ def register_handlers(bot: AsyncTeleBot) -> None:
         **_filter_admin
     )
 
+    # normal link message sent from an admin in a private chat
     bot.register_message_handler(
         link_message.handle_link_message,
         pass_bot=True,
-        **_filter_link_admin
+        **_filter_link_admin_private_chat
     )
 
+    # normal link message sent from any user in a group chat
+    # this effectively only works on groups allowed by the admins
+    # since the bot can only be added to groups by admins
+    bot.register_message_handler(
+        link_message.handle_link_message,
+        pass_bot=True,
+        **_filter_link_not_private_chat
+    )
+
+    # message with no links sent from an admin in a private chat
     bot.register_message_handler(
         link_message.handle_no_link_message,
         pass_bot=True,
-        **_filter_no_link_admin
+        **_filter_no_link_private_chat_admin
     )
+    
+    # Is not required since bot has no responsibility over chat join requests
+    # bot.register_chat_join_request_handler(
+    #     chat_actions.handle_member_joined,
+    #     pass_bot=True,
+    # )
+ 
+    # when status changes, telegram gives update. 
+    # check status from old_chat_member and new_chat_member.
+    # TODO: is never called, why??
+    bot.register_chat_member_handler(
+        chat_actions.handle_member_joined,
+        pass_bot=True,
+    )
+
+    # when bot is added to the group
+    bot.register_my_chat_member_handler(
+        chat_actions.handle_chat_join,
+        pass_bot=True,
+    )
+
+    
 
 
 def run() -> None:
@@ -150,4 +193,5 @@ def run() -> None:
     register_handlers(gem_digest_bot)
     register_custom_filters(gem_digest_bot)
 
-    asyncio.run(gem_digest_bot.polling(), debug=debug)
+    # take a look at telebot.utils documentation
+    asyncio.run(gem_digest_bot.polling(allowed_updates=update_types + ["new_chat_members"]), debug=debug)
