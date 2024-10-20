@@ -17,6 +17,7 @@ Functions:
 """
 import asyncio
 import logging
+from threading import Thread
 
 from telebot.async_telebot import AsyncTeleBot
 from telebot import ExceptionHandler
@@ -33,6 +34,7 @@ from .handlers import (
     chat_actions
 )
 
+from . import web
 from . import filters
 
 
@@ -164,8 +166,6 @@ def register_handlers(bot: AsyncTeleBot) -> None:
         pass_bot=True,
     )
 
-    
-
 
 def run() -> None:
     """Initializes and runs the GemDigest bot with asynchronous polling.
@@ -184,6 +184,11 @@ def run() -> None:
     
     if debug:
         logging.warning("Debug Mode enabled for the bot asyncio runner.")
+    
+    # Start the HTTP server in a separate thread
+    server_thread = Thread(target=web.run_http_server)
+    server_thread.daemon = True
+    server_thread.start()
 
     gem_digest_bot = AsyncTeleBot(
         token = api_keys.get_telegram_api_key(),
