@@ -47,10 +47,6 @@ async def handle_member_joined(
     chat_member_updated: ChatMemberUpdated, 
     bot: AsyncTeleBot
 ) -> None:
-    # TODO: is never called, why??
-    print("chat_member_updated: ", chat_member_updated)
-    with open("chat_member_updated.txt", "w") as f:
-        f.write(str(chat_member_updated))
 
     user_name = chat_member_updated.new_chat_member.user.username
 

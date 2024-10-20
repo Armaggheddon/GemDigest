@@ -20,6 +20,4 @@ class PrivateChatFilter(SimpleCustomFilter):
     async def check(message: Message) -> bool:
         """Checks if the message is from a private chat, i.e. with a single user.
         """
-        with open(f"message_{message.chat.type}.json", "w") as f:
-            f.write(str(message))
         return True if message.chat.type == "private" else False
