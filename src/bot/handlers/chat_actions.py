@@ -64,10 +64,14 @@ async def handle_member_joined(
         "Drop a link anytime you want the scoop\\. 📰🔗"
     )
 
-    await bot.send_message(
-        chat_member_updated.chat.id,
-        chat_join_message,
-        parse_mode="markdownv2",
-        disable_notification=True
-    )
-    
+    # is one of "member", "administrator" or "left"
+    bot_status = chat_member_updated.new_chat_member.status
+    chat_member_updated.new_chat_member.status
+
+    if bot_status == "member":
+        await bot.send_message(
+            chat_member_updated.chat.id,
+            chat_join_message,
+            parse_mode="markdownv2",
+            disable_notification=True
+        )
