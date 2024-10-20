@@ -212,4 +212,5 @@ def run() -> None:
     if debug:
         logging.warning("Debug Mode enabled for the bot asyncio runner.")
 
+    # TODO: maybe wrap in try catch to soft close on KeyboardInterrupt?
     asyncio.run(start_tasks(), debug=debug)    
