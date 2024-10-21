@@ -31,7 +31,8 @@ from .handlers import (
     tokens_command,
     help_command,
     info_command,
-    chat_actions
+    chat_actions,
+    blacklist_command
 )
 
 from .tasks_watchdog import tasks_watchdog
@@ -120,6 +121,13 @@ def register_handlers(bot: AsyncTeleBot) -> None:
     bot.register_message_handler(
         help_command.handle_help_command,
         commands=[help_command.CMD],
+        pass_bot=True,
+        **_filter_admin
+    )
+
+    bot.register_message_handler(
+        blacklist_command.handle_blacklist_command,
+        commands=[blacklist_command.CMD],
         pass_bot=True,
         **_filter_admin
     )
