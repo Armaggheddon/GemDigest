@@ -25,7 +25,8 @@ services:
     volumes:
       # - $PWD:/home/dev
       - /DATA/AppData/$AppID/configs:/home/dev
-    
+      - /DATA/AppData/$AppID/$PWD/website_blacklist.txt:/gem_digest_bot/website_blacklist.txt
+
     # Environment variables with default values
     environment:
       TELEGRAM_API_KEY: TELEGRAM_API_KEY
@@ -80,7 +81,7 @@ x-casaos:
   tips:
     custom: Add you `TELEGRAM-API-KEY` and `GEMINI-API-KEY` in settings and the
       users `ID` that are considered as admin separated by a ";" if thereare
-      more then one
+      more then one. for more info visit [GemDigest](https://github.com/Armaggheddon/GemDigest)
   # Application category
   category: BigBearCasaOS
   # Port mapping information

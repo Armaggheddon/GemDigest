@@ -58,6 +58,7 @@
     <li><strong>/help:</strong> Returns a list of available commands 📜</li>
     <li><strong>/tokens:</strong> Returns the number of tokens used 🔢</li>
     <li><strong>/info:</strong> Returns information such as the current temperature and the model being used 📊</li>
+    <li><strong>/blacklist:</strong> Returns the list of website for which the summary is not needed (e.g. youtube) 📊</li>
 </ul>
 <p>
     Examples of the following commands are provided in the table below:
@@ -82,5 +83,10 @@
     <td><code>/info</code></td>
     <td>Provides details about the current bot configuration, including temperature, model, and other settings ⚙️</td>
     <td><img src="tokens.png"></td>
+</tr>
+<tr>
+    <td><code>/blacklist</code></td>
+    <td>Provides the list of websites where summaries are not needed, such as YouTube ⛔</td>
+    <td><img src="blacklist.png"></td>
 </tr>
 </table>
