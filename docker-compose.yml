@@ -5,6 +5,6 @@ services:
       dockerfile: Dockerfile
     container_name: gem_digest_bot
     volumes:
-      - $PWD:/home/dev
+      - $PWD/website_blacklist.txt:/gem_digest_bot/website_blacklist.txt
     env_file: 
       - ./api_keys.env

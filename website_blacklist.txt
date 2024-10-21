@@ -1,0 +1,9 @@
+# Add websites to ignore, due to the nature of some
+# websites, scraping data from websites like the one
+# below would yield wrong or make the crawler fail.
+# To add a website to the blacklist just add the 
+# host name, for example
+# www.youtube.com
+# DO NOT INCLUDE protocol, i.e., http://
+www.youtube.com
+www.x.com
