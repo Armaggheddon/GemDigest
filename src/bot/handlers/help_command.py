@@ -25,6 +25,7 @@ async def handle_help_command(message: Message, bot: AsyncTeleBot) -> None:
         "\\-/help : You're already here\\! 📚\n\n"
         "\\- /tokens : I'll show you how many tokens we've crunched through so far\\! 📊\n\n"
         "\\- /info : Check out the current Gemini model settings I'm running on\\! 🧠✨\n\n"
+        "\\- /blacklist : See the list of URLs I won't scrape\\! 🚫🕵️‍♂️\n\n"
         "\\- Just send me a message with one or more links\\!\n\n"
         "I'll fetch the goods and summarize it for you\\! 🔗📋\n"
         "Need anything else\\? Just ask\\! 😎"
