@@ -10,6 +10,7 @@ Functions:
     handle_no_link_message(message: Message, bot: AsyncTeleBot) -> None:
         Handles messages that do not contain any URLs.
 """
+from enum import Enum
 
 from telebot.async_telebot import AsyncTeleBot
 from telebot.types import Message
@@ -19,7 +20,19 @@ from gemini import GeminiAPIClient, GeminiResponse
 from utils import link_utils
 
 from ..bot_utils import message_markup
-    
+
+
+class ErrorMessages(Enum):
+    """Contains error messages for the link message handler."""
+    NO_VALID_URLS_MESSAGE = (
+        "Oops\\! 🤖 I couldn't find any valid URLs in your message\\." 
+        "📭 Drop a link and let me work my magic\\! ✨"
+    )
+
+    NO_LINK_MESSAGE = (
+        "Oops\\! 🤖 It looks like there's no link in your message\\." 
+        "📭 Drop a link and let me work my magic\\! ✨"
+    )
 
 async def handle_link_message(message: Message, bot: AsyncTeleBot) -> None:
     """Handles messages containing URLs by extracting and processing the links.
@@ -39,16 +52,26 @@ async def handle_link_message(message: Message, bot: AsyncTeleBot) -> None:
     Returns:
         None: This function does not return a value.
     """
+    # Utility function to reply with a message indicating that no valid URLs
+    async def reply_no_valid_urls():
+        return await bot.reply_to(
+            message,
+            ErrorMessages.NO_VALID_URLS_MESSAGE.value,
+            parse_mode="markdownv2",
+            disable_notification=True
+        )
 
     # show GemDigest is typing on the chat top bar
     await bot.send_chat_action(message.chat.id, "typing")
 
     # TODO: add automatic addition of 'https://' to URLs without a scheme
     urls = link_utils.extract_urls(message.text)
-
-    urls = filter(lambda x: not link_utils.is_youtube(x), urls)
+    if not urls:
+        return await reply_no_valid_urls()
             
     scrape_results: list[ScrapeResult] = await crawl_urls(urls)
+    if not scrape_results:
+        return await reply_no_valid_urls()
     
     for result in scrape_results:
         prompt = result.content + "\n\n" + "\n".join(result.sub_urls)
@@ -81,10 +104,7 @@ async def handle_no_link_message(message: Message, bot: AsyncTeleBot) -> None:
         None: This function does not return a value.
     """
 
-    no_link_message = (
-        "Oops\\! 🤖 It looks like there's no link in your message\\." 
-        "📭 Drop a link and let me work my magic\\! ✨"
-    )
+    
 
     await bot.reply_to(
         message,
