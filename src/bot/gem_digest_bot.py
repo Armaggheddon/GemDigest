@@ -34,7 +34,8 @@ from .handlers import (
     chat_actions
 )
 
-from . import web
+from .tasks_watchdog import tasks_watchdog
+from .casaos_server import start_casaos_alive_server
 from . import filters
 
 
@@ -167,6 +168,32 @@ def register_handlers(bot: AsyncTeleBot) -> None:
     )
 
 
+async def start_telegram_bot():
+    gem_digest_bot = AsyncTeleBot(
+        token = api_keys.get_telegram_api_key(),
+        exception_handler=ExceptionHandler()
+    )
+
+    register_handlers(gem_digest_bot)
+    register_custom_filters(gem_digest_bot)
+
+    await gem_digest_bot.polling(
+        allowed_updates=update_types + ["new_chat_members"]) 
+
+async def start_tasks():
+    telegram_bot_task = asyncio.create_task(
+        start_telegram_bot(), 
+        name="Telegram Bot"
+    )
+    # TODO: maybe add flag for "if casaos" to start the server ?
+    # how can it be detected though?
+    casaos_task = asyncio.create_task(
+        start_casaos_alive_server(),
+        name="CasaOS Server"
+    )
+    await tasks_watchdog([telegram_bot_task, casaos_task])
+
+
 def run() -> None:
     """Initializes and runs the GemDigest bot with asynchronous polling.
 
@@ -184,19 +211,6 @@ def run() -> None:
     
     if debug:
         logging.warning("Debug Mode enabled for the bot asyncio runner.")
-    
-    # Start the HTTP server in a separate thread
-    server_thread = Thread(target=web.run_http_server)
-    server_thread.daemon = True
-    server_thread.start()
 
-    gem_digest_bot = AsyncTeleBot(
-        token = api_keys.get_telegram_api_key(),
-        exception_handler=ExceptionHandler()
-    )
-
-    register_handlers(gem_digest_bot)
-    register_custom_filters(gem_digest_bot)
-
-    # take a look at telebot.utils documentation
-    asyncio.run(gem_digest_bot.polling(allowed_updates=update_types + ["new_chat_members"]), debug=debug)
+    # TODO: maybe wrap in try catch to soft close on KeyboardInterrupt?
+    asyncio.run(start_tasks(), debug=debug)    

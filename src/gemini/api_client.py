@@ -175,11 +175,11 @@ class GeminiAPIClient():
         # interact without having to manage a class
         # instance
         GeminiAPIClient._touch_instance()
-        return await GeminiAPIClient._instance._generate_text_with_retry(
+        return await GeminiAPIClient._instance._attempt_generate_text(
             prompt, format, max_retries)
     
 
-    async def _generate_text_with_retry(
+    async def _attempt_generate_text(
         self, 
         prompt: str, 
         format: bool, 
