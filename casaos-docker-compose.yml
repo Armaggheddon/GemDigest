@@ -23,9 +23,7 @@ services:
 
     # Mount local directory to the container's /home/dev directory
     volumes:
-      # - $PWD:/home/dev
-      - /DATA/AppData/$AppID/configs:/home/dev
-      - /DATA/AppData/$AppID/$PWD/website_blacklist.txt:/gem_digest_bot/website_blacklist.txt
+      - /DATA/AppData/$AppID/constant:/gem_digest_bot/src/constant
 
     # Environment variables with default values
     environment:
@@ -45,9 +43,9 @@ services:
 
     x-casaos: # CasaOS specific configuration
       volumes:
-        - container: /home/dev
+        - container: /gem_digest_bot/src/constant
           description:
-            en_us: "Container Path: /home/dev"
+            en_us: "Container Path: /gem_digest_bot/src/constant"
       ports:
         - container: "8080"
           description:
