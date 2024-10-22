@@ -23,9 +23,8 @@ services:
 
     # Mount local directory to the container's /home/dev directory
     volumes:
-      # - $PWD:/home/dev
-      - /DATA/AppData/$AppID/configs:/home/dev
-    
+      - /DATA/AppData/$AppID/constant:/gem_digest_bot/src/constant
+
     # Environment variables with default values
     environment:
       TELEGRAM_API_KEY: TELEGRAM_API_KEY
@@ -44,9 +43,9 @@ services:
 
     x-casaos: # CasaOS specific configuration
       volumes:
-        - container: /home/dev
+        - container: /gem_digest_bot/src/constant
           description:
-            en_us: "Container Path: /home/dev"
+            en_us: "Container Path: /gem_digest_bot/src/constant"
       ports:
         - container: "8080"
           description:
@@ -80,7 +79,7 @@ x-casaos:
   tips:
     custom: Add you `TELEGRAM-API-KEY` and `GEMINI-API-KEY` in settings and the
       users `ID` that are considered as admin separated by a ";" if thereare
-      more then one
+      more then one. for more info visit [GemDigest](https://github.com/Armaggheddon/GemDigest)
   # Application category
   category: BigBearCasaOS
   # Port mapping information
