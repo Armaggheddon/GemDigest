@@ -1,7 +1,7 @@
 
 def _get_website_blacklist():
 
-    _website_blacklist_path = "/gem_digest_bot/website_blacklist.txt"
+    _website_blacklist_path = "/gem_digest_bot/website_blacklist.txt.yml
     blacklisted_websites = []
 
     with open(_website_blacklist_path, "r") as f:
