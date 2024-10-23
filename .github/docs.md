@@ -87,6 +87,6 @@
 <tr>
     <td><code>/blacklist</code></td>
     <td>Provides the list of websites where summaries are not needed, such as YouTube ⛔</td>
-    <td><img src="blacklist.png"></td>
+    <td><img src="blacklist.jpg"></td>
 </tr>
 </table>
