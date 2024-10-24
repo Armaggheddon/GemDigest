@@ -14,10 +14,10 @@ def _get_website_blacklist():
         list: A list of blacklisted websites (if the file exists), or an 
             empty list otherwise.
     """
-    _website_blacklist_path = "/gem_digest_bot/src/constant/website_blacklist.txt"
+    _website_blacklist_path = "/gem_digest_bot/extra_configs/website_blacklist.txt"
     blacklisted_websites = []
 
-    if not os.path.exists(_website_blacklist_path):
+    if not os.path.isfile(_website_blacklist_path):
         return []
     
     with open(_website_blacklist_path, "r") as f:

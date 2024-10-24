@@ -58,7 +58,7 @@ RUN pip install --no-cache-dir playwright && \
 
 EXPOSE 8000
 
-COPY . .
+COPY ./src .
 
 # ENTRYPOINT [ "bash" ]
 CMD ["python", "-u", "src/main.py"]
