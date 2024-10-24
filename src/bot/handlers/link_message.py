@@ -17,7 +17,7 @@ from telebot.types import Message
 
 from crawler import crawl_urls, ScrapeResult
 from gemini import GeminiAPIClient, GeminiResponse
-from utils import link_utils
+from utils import link_utils, markdown_v2_sanitizer
 
 from ..bot_utils import message_markup
 
@@ -29,10 +29,30 @@ class ErrorMessages(Enum):
         "📭 Drop a link and let me work my magic\\! ✨"
     )
 
+    CANNOT_CRAWL_MESSAGE = (
+        "Oops\\! 🕵️‍♂️ Our little web\\-sleuth tripped over a broken link\\!"
+        "We'll get back on track soon\\! 🌐💥"
+    )
+
+    GEMINI_API_FAIL_REASON_MESSAGE = (
+        "Yikes\\! 🚨 Gemini stopped because: _{reason}_\n"
+        "Looks like something spooked it\\! 😬"
+        "Let's keep it friendly and try again\\! 😊"
+    )
+
+    GEMINI_API_FAIL_MESSAGE = (
+        "Uh\\-oh\\! 🚧 Gemini's gone silent for unknown reasons\\… "
+        "Maybe the stars are misaligned\\? 🌠 Let's try again\\!"
+    )
+
     NO_LINK_MESSAGE = (
         "Oops\\! 🤖 It looks like there's no link in your message\\." 
         "📭 Drop a link and let me work my magic\\! ✨"
     )
+
+    def format(self, *args, **kwargs) -> str:
+        """Formats the error message with the given arguments."""
+        return self.value.format(*args, **kwargs)
 
 async def handle_link_message(message: Message, bot: AsyncTeleBot) -> None:
     """Handles messages containing URLs by extracting and processing the links.
@@ -53,10 +73,10 @@ async def handle_link_message(message: Message, bot: AsyncTeleBot) -> None:
         None: This function does not return a value.
     """
     # Utility function to reply with a message indicating that no valid URLs
-    async def reply_no_valid_urls():
+    async def reply_with_error(response_text: str) -> None:
         return await bot.reply_to(
             message,
-            ErrorMessages.NO_VALID_URLS_MESSAGE.value,
+            response_text,
             parse_mode="markdownv2",
             disable_notification=True
         )
@@ -67,27 +87,34 @@ async def handle_link_message(message: Message, bot: AsyncTeleBot) -> None:
     # TODO: add automatic addition of 'https://' to URLs without a scheme
     urls = link_utils.extract_urls(message.text)
     if not urls:
-        return await reply_no_valid_urls()
+        return await reply_with_error(
+            ErrorMessages.NO_VALID_URLS_MESSAGE.value)
             
     scrape_results: list[ScrapeResult] = await crawl_urls(urls)
     if not scrape_results:
-        return await reply_no_valid_urls()
+        return await reply_with_error(ErrorMessages.CANNOT_CRAWL_MESSAGE.value)
     
     for result in scrape_results:
         prompt = result.content + "\n\n" + "\n".join(result.sub_urls)
         output: GeminiResponse = await GeminiAPIClient.generate_text(prompt)
 
-        # TODO: add error_message formatting
-
-        await bot.reply_to(
-            message,
-            output.text if output.text else output.error_message,
-            disable_notification=True,
-            parse_mode='html',
-            reply_markup=message_markup.generate_article_button_markup(
-                result.original_url
-                )
-        )
+        if not output.text or output.error_message:
+            error_message = (
+                ErrorMessages.GEMINI_API_FAIL_MESSAGE.value 
+                if not output.error_message 
+                else ErrorMessages.GEMINI_API_FAIL_REASON_MESSAGE.format(
+                    reason=markdown_v2_sanitizer.sanitize_str(output.error_message))
+            )
+            await reply_with_error(error_message)
+        else:
+            await bot.reply_to(
+                message,
+                output.text if output.text else output.error_message,
+                disable_notification=True,
+                parse_mode='html',
+                reply_markup=message_markup.generate_article_button_markup(
+                    result.original_url)
+            )
 
 
 async def handle_no_link_message(message: Message, bot: AsyncTeleBot) -> None:
@@ -104,11 +131,9 @@ async def handle_no_link_message(message: Message, bot: AsyncTeleBot) -> None:
         None: This function does not return a value.
     """
 
-    
-
     await bot.reply_to(
         message,
-        no_link_message,
+        ErrorMessages.NO_LINK_MESSAGE.value,
         parse_mode="markdownv2",
         disable_notification=True
     )
