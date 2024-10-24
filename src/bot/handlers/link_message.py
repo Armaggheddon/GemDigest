@@ -30,7 +30,7 @@ class ErrorMessages(Enum):
     )
 
     CANNOT_CRAWL_MESSAGE = (
-        "Oops\\! 🕵️‍♂️ Our little web\\-sleuth tripped over a broken link\\!"
+        "Oops\\! 🕵️‍♂️ Our little web\\-sleuth tripped over a broken link\\! "
         "We'll get back on track soon\\! 🌐💥"
     )
 
