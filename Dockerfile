@@ -56,7 +56,7 @@ RUN pip install --no-cache-dir playwright && \
     playwright install && \
     playwright install-deps
 
-COPY ./src .
+COPY ./src ./src
 
 # ENTRYPOINT [ "bash" ]
 CMD ["python", "-u", "src/main.py"]
