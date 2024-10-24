@@ -56,8 +56,6 @@ RUN pip install --no-cache-dir playwright && \
     playwright install && \
     playwright install-deps
 
-EXPOSE 8000
-
 COPY ./src .
 
 # ENTRYPOINT [ "bash" ]

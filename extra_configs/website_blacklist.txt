@@ -6,4 +6,4 @@
 # http://www.youtube.com
 # If the protocol is not included, it defaults to https://
 www.youtube.com
-www.x.com
+x.com

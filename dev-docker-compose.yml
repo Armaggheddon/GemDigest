@@ -7,7 +7,7 @@ services:
     container_name: gem_digest_dev
     volumes:
       - $PWD:/home/dev
-      - $PWD/src/constant/website_blacklist.txt:/gem_digest_bot/src/constant/website_blacklist.txt
+      - $PWD/extra_configs:/gem_digest_bot/extra_configs
     env_file: 
       - ./api_keys.env
     stdin_open: true # docker run -i
