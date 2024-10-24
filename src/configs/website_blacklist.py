@@ -29,7 +29,6 @@ def _get_website_blacklist():
             
             blacklisted_websites.append(line)
         
-    print(f"Blacklisted websites: {blacklisted_websites}")
     return blacklisted_websites
 
 
