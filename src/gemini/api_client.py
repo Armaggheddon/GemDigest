@@ -243,15 +243,8 @@ class GeminiAPIClient():
         # generating one-time content based
         # on a prompt
         response = await self.model.generate_content_async(prompt)
-        _generated_text = response.text
 
-        # token count in gemini api uses caching, therefore
-        # the prompt_token_count will remain the same
-        # for the same prompt. Similar behavior is seen
-        # in candidates_token_count. The only "stable"
-        # number is total_token_count. Maybe just use that ?!
         usage_metadata = response.usage_metadata
-
         # get token counts
         (self
             .token_count
@@ -266,13 +259,15 @@ class GeminiAPIClient():
             .token_count
             .total_output_token_count) += usage_metadata.candidates_token_count
 
-        # in our scenario there is only one candidate
+        # right now apis only return one candidate
         finish_reason = GeminiFinishReasonMessages[
             response.candidates[0].finish_reason.name]
+        
         if finish_reason != GeminiFinishReasonMessages.STOP: 
             return GeminiResponse(
                 error_message=finish_reason.value)
 
+        _generated_text = response.text
         if format:
             _generated_text = format_gemini_response(_generated_text)
         
