@@ -263,9 +263,7 @@ class GeminiAPIClient():
         finish_reason = GeminiFinishReasonMessages[
             response.candidates[0].finish_reason.name]
         
-        if (
-            finish_reason != GeminiFinishReasonMessages.STOP 
-            or finish_reason != GeminiFinishReasonMessages.MAX_TOKENS): 
+        if finish_reason != GeminiFinishReasonMessages.STOP: 
             return GeminiResponse(
                 error_message=finish_reason.value)
 
