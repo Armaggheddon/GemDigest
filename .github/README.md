@@ -232,6 +232,7 @@
 
 <h3> <img src="https://storage.yandexcloud.net/products/f2e3n595vqa179mqavo0.svg" width="18"> CasaOS </h3>
 <ul>
+    <li>Add the <code><a href="https://awesome.casaos.io/content/3rd-party-app-stores/list.html#_6-big-bear-casaos-app-store">BigBearCasaOS</a></code> to the store</li>
     <li>Download <code>GemDigest</code> from the Store</li>
     <li>Open the Settings of the app</li>
     <li>Add your <code>Telegram API Key</code>, <code>Gemini API Key</code> and the <code>Admin ID</code> (If you have more user add the diferent ID's separated by a <code>";"</code>)</li>
