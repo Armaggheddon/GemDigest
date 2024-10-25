@@ -1,7 +1,7 @@
 <h1 id="documentation"><br/><br/>📚  Documentation</h1>
 <h3 id="gemini"><br/><img src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/google-gemini-icon.png" width="20">  GEMINI</h3>
 <p>
-    The bot is highly customizable 🤖, allowing you to adjust the prompt according to your needs, resulting in more personalized responses ✍️. You can also configure various settings ⚙️, such as the model and the temperature, depending on the context or the type of output you want to generate.
+    The bot is highly customizable 🤖, allowing you to adjust the prompt according to your needs, resulting in more personalized responses ✍️. You can also configure various settings ⚙️, such as the model and the temperature, depending on the context or the type of output you want to generate <a href="../src/gemini/api_client.py#83">here</a>.
 </p>
 <p>
     By default, the following parameters are set:
@@ -17,6 +17,9 @@
 <p>
     You can modify these parameters to suit your specific needs, such as increasing the temperature for more creative responses 🎨 or lowering it for more deterministic outputs ✅. Similarly, Top P, Top K, and Top N can be adjusted to control how broad or narrow the selection of possible next tokens should be during generation.
 </p>
+
+> [!WARNING]
+> Changing the response mime type might change the way gemini formats its response and its response parser. 
 
 <h3 id="crawler"><br/>🕷️🤖  CRAWLER</h3>
 
@@ -35,16 +38,17 @@
     For example, if you set <code>ADMIN_USER_ID=123</code> where <code>123</code> is the user's ID, the bot will be able to interact with this specific user through a private chat 💬. If you wish to allow multiple users to interact with the bot in separate private chats, you can simply add their IDs, like so: <code>ADMIN_USER_ID=123;456</code>. This way, each user will have the ability to privately communicate with the bot 👥💬.
 </p>
 <p>
-    If you want the bot to interact with users in a group, simply add the bot to the desired group and set <code>ADMIN_USER_ID=-100789</code>, where <code>-100789</code> represents the group ID 🛠️.
+    Only admin users can add the GemDigest bot to group chats. Once added, GemDigest will interact with everyone in the group—no admin status needed for standard interactions! However, only admins can issue direct commands to control the bot's features.
+    If a non-admin attempts to:
+    <ul>
+    <li><b>Create a private chat with the bot</b> – GemDigest will simply ignore the message 🤷</li>
+    <li><b>Add the bot to another group</b> – it will politely leave the chat 👋</li>
+    </ul>
+    This setup ensures GemDigest runs smoothly in groups and maintains control with admin users!
 </p>
 
 > [!NOTE]  
 > To get a user’s ID, follow this guide 📝: [whoami_bot](https://github.com/Armaggheddon/whoami_bot)
-> To get a group’s ID, use this guide 📝: [Group ID](https://stackoverflow.com/a/72649378/8723227)
-
-
-> [!TIP]
-> Additionally, it is possible to enable both private chats with the bot and group interactions simultaneously by setting `ADMIN_USER_ID` as follows: `ADMIN_USER_ID=123;567;-100789`. In this case, the bot will be able to engage with users in private chats as well as in the specified group 🗣️👥.
 
 <p>
     With this flexible setup, you can fine-tune how the bot communicates 📞, whether for one-on-one interactions or group-wide discussions 🗨️💡.
@@ -86,7 +90,7 @@
 </tr>
 <tr>
     <td><code>/blacklist</code></td>
-    <td>Provides the list of websites where summaries are not needed, such as YouTube ⛔</td>
+    <td>Provides the list of websites that will be ignored, such as YouTube ⛔</td>
     <td><img src="images/blacklist.jpg"></td>
 </tr>
 </table>
@@ -94,5 +98,5 @@
 
 <h3 id="blacklist"><br/>⛔  BLACKLIST</h3>
 <p>
-    To add a website to the blacklist you can go to the folder <code>extra_configs</code> create a file called <code>website_blacklist.txt</code> if doesn't exist and add the website you want to blacklist (For example www.youtube.com or www.x.com) ore per row. Then close the file and restart the bot or the container.
+    To add a website to the blacklist you can edit <a href="../extra_configs/website_blacklist.txt"><code>website_blacklist.txt</code></a> and add the website you want to blacklist (For example www.youtube.com or www.x.com) are already in! Then close the file and restart the bot or the container.
 </p>
