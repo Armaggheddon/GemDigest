@@ -98,5 +98,5 @@
 
 <h3 id="blacklist"><br/>⛔  BLACKLIST</h3>
 <p>
-    To add a website to the blacklist you can edit <a href="../extra_configs/website_blacklist.txt"><code>website_blacklist.txt</code></a> and add the website you want to blacklist (For example www.youtube.com or www.x.com) are already in! Then close the file and restart the bot or the container.
+    To add a website to the blacklist you can edit <a href="../extra_configs/website_blacklist.txt"><code>website_blacklist.txt</code></a> and add the website you want to blacklist. For example www.youtube.com and www.x.com are already in! Then close the file and restart the bot or the container.
 </p>
