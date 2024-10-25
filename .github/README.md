@@ -49,20 +49,14 @@
 <p align="center">
     <img src="images/cover.png">
 </p>
+</br>
 
-<br/>
-<br/>
-<h3 align="center">Customize Your Experience 🎯</h3>
-<p>
-    As an added feature, you can even specify which people you want the bot to focus on. This way, GemDigest will summarize only the links sent by specific users and ignore others—perfect for group chats where only certain recommendations matter to you! 👥📲
-</p>
-<br/>
-<p align="center">
-    <img src="https://www.muycomputer.com/wp-content/uploads/2016/04/google-telegram.jpg">
-</p>
-<br/>
-<br/>
 <h3 align="center">Powered by Google Gemini 🚀</h3>
+</br>
+</br>
+<p align="center">
+    <img src="./images/built_with.png" width="70%">
+</p>
 <p>
     GemDigest uses the power of Google’s Gemini API, so you don’t need any specialized or high-performance hardware to enjoy this feature. All the heavy lifting is done by Google’s servers, meaning the bot is fast, reliable, and doesn’t require any expensive infrastructure on your end. 💡 The best part? The Google Gemini API is completely free (with some limitations), so you won’t have to spend a cent! 💰
 </p>
@@ -74,12 +68,13 @@
 
 <h2 id="made-in"><br/>🛠  Built in</h2>
 <p>
-    This project is entirely written in Python and uses the Google Gemini API for summarizing articles from the links provided. It also uses the Telegram API for sending the digests to the users.
+    This project is entirely written in Python and uses Crawl4AI in conjunction with the Google Gemini API for summarizing articles from the links provided. It also uses the Telegram API for sending the digests to the users.
 </p>
 <br/>
 <div align="center"> 
     <a href="https://www.python.org">Python</a> • 
     <a href="https://ai.google.dev/gemini-api/?utm_source=google&utm_medium=cpc&utm_campaign=core-brand-eur-sem&utm_id=21341690381&gad_source=1&gbraid=0AAAAACn9t64XUQZ4y0dYpRDad6aQAfSBp&gclid=CjwKCAjwjsi4BhB5EiwAFAL0YKWC3RF9GuUdj2urhHRIAbN7axXPEwk3jRiecBGQ5brJ7W4-6ammvRoCw_0QAvD_BwE">Google Gemini API</a> • 
+    <a href="https://github.com/unclecode/crawl4ai">Crawl4AI</a> • 
     <a href="https://github.com/eternnoir/pyTelegramBotAPI">Telegram API</a>
 </div>
 
@@ -204,6 +199,13 @@
     docker run -d --env-file api_keys.env --name gem_digest_bot gem_digest_bot
     ```
 
+5. **(OPTIONAL)** Add blacklist for websites to crawl:
+    - Edit the file in [`extra_configs/website_blacklist.txt`](../extra_configs/website_blacklist.txt) adding your websites to blacklist
+    - Mount the file in the container (use this command instead of the one at step `4`)
+        ```bash
+        docker run -d --env-file api_keys.env --name gem_digest_bot -v $(pwd)/extra_configs:/gem_digest_bot/extra_configs gem_digest_bot
+        ```
+
 <h3> <img src="https://openwhisk.apache.org/images/deployments/logo-docker-compose-notext.png" width="20"> Docker Compose </h3>
 
 1. Create a copy of the file `api_keys.env.example` and rename it to `api_keys.env`
@@ -229,6 +231,8 @@
     ```bash
     docker compose -f docker-compose.yml up -d
     ```
+
+5. **(OPTIONAL)** Add blacklist for websites to crawl by editing the file in [`extra_configs/website_blacklist.txt`](../extra_configs/website_blacklist.txt)
 
 <h3> <img src="https://storage.yandexcloud.net/products/f2e3n595vqa179mqavo0.svg" width="18"> CasaOS </h3>
 <ul>
@@ -284,6 +288,7 @@
 <p>
     (Even in the phase of requests for the implementation of new functions, we ask you to better specify the reasons for the request and what final result you want to obtain).
 </p>
+<br/>
 <br/>
 
 <p align="right"><a href="#top">⇧</a></p>
