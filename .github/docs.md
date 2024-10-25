@@ -1,5 +1,5 @@
 <h1 id="documentation"><br/><br/>📚  Documentation</h1>
-<h3 id="documentation"><br/><img src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/google-gemini-icon.png" width="20">  GEMINI</h3>
+<h3 id="gemini"><br/><img src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/google-gemini-icon.png" width="20">  GEMINI</h3>
 <p>
     The bot is highly customizable 🤖, allowing you to adjust the prompt according to your needs, resulting in more personalized responses ✍️. You can also configure various settings ⚙️, such as the model and the temperature, depending on the context or the type of output you want to generate.
 </p>
@@ -18,7 +18,7 @@
     You can modify these parameters to suit your specific needs, such as increasing the temperature for more creative responses 🎨 or lowering it for more deterministic outputs ✅. Similarly, Top P, Top K, and Top N can be adjusted to control how broad or narrow the selection of possible next tokens should be during generation.
 </p>
 
-<h3 id="documentation"><br/>🕷️🤖  CRAWLER</h3>
+<h3 id="crawler"><br/>🕷️🤖  CRAWLER</h3>
 
 > [!NOTE]  
 > Currently, it is not possible to set custom parameters for the crawler 🚧.
@@ -27,7 +27,7 @@
     The crawler operates with a fixed configuration designed to efficiently retrieve and process data 📂, but future updates may include options for more granular control ⚙️, such as setting intervals ⏲️ or data extraction rules 📋.
 </p>
 
-<h3 id="documentation"><br/>🧑‍🧑‍🧒‍🧒  USERS & GROUPS</h3>
+<h3 id="usergroups"><br/>🧑‍🧑‍🧒‍🧒  USERS & GROUPS</h3>
 <p>
     In terms of user interaction, the bot can be set up to interact either with individual users 👤 or with users within groups 👥. This allows for flexible engagement depending on your needs.
 </p>
@@ -50,7 +50,7 @@
     With this flexible setup, you can fine-tune how the bot communicates 📞, whether for one-on-one interactions or group-wide discussions 🗨️💡.
 </p>
 
-<h3 id="documentation"><br/>📋 DEFAULT COMMANDS</h3>
+<h3 id="defaultcommands"><br/>📋 DEFAULT COMMANDS</h3>
 <p>
     You can use the following predefined commands to get information about the bot's functionalities:
 </p>
@@ -58,7 +58,7 @@
     <li><strong>/help:</strong> Returns a list of available commands 📜</li>
     <li><strong>/tokens:</strong> Returns the number of tokens used 🔢</li>
     <li><strong>/info:</strong> Returns information such as the current temperature and the model being used 📊</li>
-    <li><strong>/blacklist:</strong> Returns the list of website for which the summary is not needed (e.g. youtube) 📊</li>
+    <li><strong>/blacklist:</strong> Returns the list of website for which the summary is not needed (e.g. youtube) ⛔</li>
 </ul>
 <p>
     Examples of the following commands are provided in the table below:
@@ -72,21 +72,27 @@
 <tr>
     <td><code>/help</code></td>
     <td>Displays a list of all available commands, helping you explore the bot's features more easily 🛠️</td>
-    <td><img src="help.png"></td>
+    <td><img src="images/help.png"></td>
 </tr>
 <tr>
     <td><code>/tokens</code></td>
     <td>Shows the number of tokens used so far, helping to keep track of the token consumption efficiently 🔍</td>
-    <td><img src="info.png"></td>
+    <td><img src="images/info.png"></td>
 </tr>
 <tr>
     <td><code>/info</code></td>
     <td>Provides details about the current bot configuration, including temperature, model, and other settings ⚙️</td>
-    <td><img src="tokens.png"></td>
+    <td><img src="images/tokens.png"></td>
 </tr>
 <tr>
     <td><code>/blacklist</code></td>
     <td>Provides the list of websites where summaries are not needed, such as YouTube ⛔</td>
-    <td><img src="blacklist.jpg"></td>
+    <td><img src="images/blacklist.jpg"></td>
 </tr>
 </table>
+
+
+<h3 id="blacklist"><br/>⛔  BLACKLIST</h3>
+<p>
+    To add a website to the blacklist you can go to the folder <code>extra_configs</code> create a file called <code>website_blacklist.txt</code> if doesn't exist and add the website you want to blacklist (For example www.youtube.com or www.x.com) ore per row. Then close the file and restart the bot or the container.
+</p>

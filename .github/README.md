@@ -5,7 +5,7 @@
 
 
 <p align="center">
-  <img src="logo.png" width="150">
+  <img src="images/logo.png" width="150">
 </p>
 <h1 align="center">
     <a href="https://github.com/Armaggheddon/GemDigest">GemDigest</a>
@@ -37,7 +37,7 @@
 
 
 <br/><br/>
-<h2 id="itroduction">📔  Itroduction</h2>
+<h2 id="itroduction">📔  Introduction</h2>
 <h3 align="center">Introducing GemDigest: Your Personal Article Summarizer for Telegram! 📜✨</h3>
 <p>
     Are you tired of wading through endless articles filled with redundant information, unclear points, or annoying ads? GemDigest is here to help! This simple yet powerful Telegram bot lets you quickly summarize articles from various websites, giving you a clear and concise summary in just a few sentences.
@@ -47,7 +47,7 @@
 </p>
 <br/>
 <p align="center">
-    <img src="cover.png">
+    <img src="images/cover.png">
 </p>
 
 <br/>
@@ -180,11 +180,59 @@
 
 <h3> <img src="https://tech.osteel.me/images/2020/03/04/docker-introduction-02.png" width="20"> Docker </h3>
 
+1. Create a copy of the file `api_keys.env.example` and rename it to `api_keys.env`
+
+
+2. Add the API Keys to the `api_keys.env` file
+
+    ```bash
+    TELEGRAM_API_KEY=1234567890:ABCDEF
+    GEMINI_API_KEY=1234567890:ABCDEF
+    # If you have more than one admin, separate the IDs with a ";"
+    ADMIN_ID=1234;5678
+    ```
+
+3. Build the container
+
+    ```bash
+    docker build -t gem_digest_bot .
+    ```
+
+4. Start the container
+
+    ```bash
+    docker run -d --env-file api_keys.env --name gem_digest_bot gem_digest_bot
+    ```
+
 <h3> <img src="https://openwhisk.apache.org/images/deployments/logo-docker-compose-notext.png" width="20"> Docker Compose </h3>
 
+1. Create a copy of the file `api_keys.env.example` and rename it to `api_keys.env`
+
+
+2. Add the API Keys to the `api_keys.env` file
+
+    ```bash
+    TELEGRAM_API_KEY=1234567890:ABCDEF
+    GEMINI_API_KEY=1234567890:ABCDEF
+    # If you have more than one admin, separate the IDs with a ";"
+    ADMIN_ID=1234;5678
+    ```
+
+3. Build the container
+
+    ```bash
+    docker compose -f docker-compose.yml build
+    ```
+
+4. Start the container
+
+    ```bash
+    docker compose -f docker-compose.yml up -d
+    ```
 
 <h3> <img src="https://storage.yandexcloud.net/products/f2e3n595vqa179mqavo0.svg" width="18"> CasaOS </h3>
 <ul>
+    <li>Add the <code><a href="https://awesome.casaos.io/content/3rd-party-app-stores/list.html#_6-big-bear-casaos-app-store">BigBearCasaOS</a></code> to the store</li>
     <li>Download <code>GemDigest</code> from the Store</li>
     <li>Open the Settings of the app</li>
     <li>Add your <code>Telegram API Key</code>, <code>Gemini API Key</code> and the <code>Admin ID</code> (If you have more user add the diferent ID's separated by a <code>";"</code>)</li>
