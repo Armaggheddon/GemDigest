@@ -4,6 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: gem_digest_bot
+    restart: unless-stopped
     volumes:
       - $PWD/src/extra_configs:/gem_digest_bot/extra_configs
     env_file: 
