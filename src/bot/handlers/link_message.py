@@ -84,7 +84,6 @@ async def handle_link_message(message: Message, bot: AsyncTeleBot) -> None:
     # show GemDigest is typing on the chat top bar
     await bot.send_chat_action(message.chat.id, "typing")
 
-    # TODO: add automatic addition of 'https://' to URLs without a scheme
     urls = link_utils.extract_urls(message.text)
     if not urls:
         return await reply_with_error(

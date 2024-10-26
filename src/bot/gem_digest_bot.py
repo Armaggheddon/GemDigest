@@ -22,6 +22,7 @@ from threading import Thread
 from telebot.async_telebot import AsyncTeleBot
 from telebot import ExceptionHandler
 from telebot.util import update_types
+from loguru import logger
 
 from configs import api_keys
 
@@ -154,16 +155,9 @@ def register_handlers(bot: AsyncTeleBot) -> None:
         pass_bot=True,
         **_filter_no_link_private_chat_admin
     )
-    
-    # Is not required since bot has no responsibility over chat join requests
-    # bot.register_chat_join_request_handler(
-    #     chat_actions.handle_member_joined,
-    #     pass_bot=True,
-    # )
  
     # when status changes, telegram gives update. 
     # check status from old_chat_member and new_chat_member.
-    # TODO: is never called, why??
     bot.register_chat_member_handler(
         chat_actions.handle_member_joined,
         pass_bot=True,
@@ -193,8 +187,7 @@ async def start_tasks():
         start_telegram_bot(), 
         name="Telegram Bot"
     )
-    # TODO: maybe add flag for "if casaos" to start the server ?
-    # how can it be detected though?
+
     casaos_task = asyncio.create_task(
         start_casaos_alive_server(),
         name="CasaOS Server"
@@ -220,8 +213,9 @@ def run() -> None:
     if debug:
         logging.warning("Debug Mode enabled for the bot asyncio runner.")
 
-    # TODO: maybe wrap in try catch to soft close on KeyboardInterrupt?
     try:
         asyncio.run(start_tasks(), debug=debug)    
     except KeyboardInterrupt:
+        
+        logger.info("Shutting down the bot due to a keyboard interrupt.")
         return

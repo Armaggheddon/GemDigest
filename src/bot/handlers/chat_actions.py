@@ -39,9 +39,6 @@ async def handle_chat_join(
             disable_notification=True
         )
 
-    # TODO: uncomment for testing so that bot automatically leaves chat
-    # await bot.leave_chat(chat_member_updated.chat.id)
-
 
 async def handle_member_joined(
     chat_member_updated: ChatMemberUpdated, 

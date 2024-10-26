@@ -1,4 +1,6 @@
 import asyncio
+
+from loguru import logger
 from aiohttp import web
 
 async def start_casaos_alive_server():
@@ -8,8 +10,9 @@ async def start_casaos_alive_server():
     runner = web.AppRunner(app)
     await runner.setup()
     site = web.TCPSite(runner, "0.0.0.0", 8080, reuse_port=True)
+    logger.info(
+        f"CasaOS status server started on: http://{site._host}:{site._port}")
     await site.start()
-    print(f"Server started at http://{site._host}:{site._port}")
     while True:
         # keep the server running forever
         await asyncio.sleep(3600)

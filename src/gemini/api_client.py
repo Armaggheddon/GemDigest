@@ -217,8 +217,11 @@ class GeminiAPIClient():
             finally:
                 retries += 1
         
-        return (_last_result if _last_result 
-            else GeminiResponse(error_message="Max retries reached"))
+        return (
+            _last_result 
+            if _last_result 
+            else GeminiResponse(error_message="Max retries reached")
+        )
 
     
     async def _generate_text(
@@ -236,16 +239,9 @@ class GeminiAPIClient():
         Returns:
             GeminiResponse: The generated text or an error message.
         """
-        # Use generate_content instead of 
-        # chat_session since we are not
-        # interacting with the model in a
-        # conversational manner, but rather
-        # generating one-time content based
-        # on a prompt
         response = await self.model.generate_content_async(prompt)
 
         usage_metadata = response.usage_metadata
-        # get token counts
         (self
             .token_count
             .last_input_token_count) = usage_metadata.prompt_token_count

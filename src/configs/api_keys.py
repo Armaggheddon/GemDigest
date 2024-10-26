@@ -54,8 +54,6 @@ def get_admin_user_ids() -> list[int]:
     try:
         admin_users = os.environ["ADMIN_USER_ID"]
         admin_list = admin_users.split(";")
-
         return [int(admin.strip()) for admin in admin_list]
-
     except KeyError as e:
         raise KeyError("ADMIN_USER_ID environment variable not set")

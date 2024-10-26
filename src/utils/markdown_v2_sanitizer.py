@@ -9,9 +9,7 @@ def sanitize_code(text: str) -> str:
     Returns:
         str: The sanitized code.
     """
-    # Escape special characters
     escape_chars = ["`", "\\"]
-
     return _base_sanitize(text, escape_chars)
 
 
@@ -25,9 +23,10 @@ def sanitize_str(text: str) -> str:
     Returns:
         str: The sanitized text.
     """
-    # Escape special characters
-    escape_chars = ["_", "*","[", "]", "(", ")", "~", "`", ">", "#", "+", "-", "=", "|", "{", "}", ".", "!"]
-
+    escape_chars = [
+        "_", "*","[", "]", "(", ")", "~", "`", ">",
+        "#", "+", "-", "=", "|", "{", "}", ".", "!"
+    ]
     return _base_sanitize(text, escape_chars)
 
 

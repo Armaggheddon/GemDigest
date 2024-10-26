@@ -21,12 +21,10 @@ def _get_website_blacklist():
         return []
     
     with open(_website_blacklist_path, "r") as f:
-        
         for line in f:
             line = line.strip()
             if line.startswith("#") or not line:
                 continue
-            
             blacklisted_websites.append(line)
         
     return blacklisted_websites

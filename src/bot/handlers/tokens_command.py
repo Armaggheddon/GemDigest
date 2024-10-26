@@ -35,12 +35,11 @@ async def handle_tokens_command(message: Message, bot: AsyncTeleBot) -> None:
         User sends `/tokens`, and the bot replies with the token usage 
             statistics.
     """
-
-
     token_count = GeminiAPIClient.get_used_tokens()
-    # response_message = message_template % astuple(token_count)
-    total_tokens_used = (token_count.total_input_token_count 
-        + token_count.total_output_token_count)
+    total_tokens_used = (
+        token_count.total_input_token_count 
+        + token_count.total_output_token_count
+    )
     
     response_message = (
         "Here's the token breakdown\\! 🧮✨\n\n"

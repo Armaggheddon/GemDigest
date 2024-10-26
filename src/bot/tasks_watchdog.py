@@ -1,5 +1,7 @@
 import asyncio
 
+from loguru import logger
+
 
 async def tasks_watchdog(tasks: list[asyncio.Task]) -> None:
     """Monitors the given tasks and cancels them if any task fails.
@@ -18,22 +20,25 @@ async def tasks_watchdog(tasks: list[asyncio.Task]) -> None:
         done, pending = await asyncio.wait(tasks, return_when=asyncio.FIRST_EXCEPTION)
 
         for task in done:
-            print(f"Task {task.get_name()} is done.")
+            logger.info(f"Task {task.get_name()} is done.")
             if task.exception():
-                print(f"Task {task.get_name()} raised an exception: {task.exception()}")
+                logger.error(
+                    f"Task {task.get_name()} raised an exception: "
+                    f"{task.exception()}"
+                )
                 raise task.exception() # raise to stop the program
             
     except Exception as e:
         
         # if any task fails cancel the ones still pending
         for task in pending:
-            print(f"Cancelling task {task.get_name()}")
+            logger.info(f"Cancelling task {task.get_name()}")
             task.cancel()
 
-        # TODO: maybe use loguru.error
-        print(f"Shutting down the bot due to an exception in a task: {e}")
+        logger.error(
+            f"Shutting down the bot due to an exception in a task: {e}")
 
         # wait for all tasks to be cancelled
         await asyncio.gather(*pending, return_exceptions=True)
 
-        print("All tasks have been cancelled.")
+        # all tasks are cancelled at this point
