@@ -1,7 +1,7 @@
 # Configuration for GemDigest bot setup
 
 # Name of the gem-digest-bot application
-name: gem-digest-bot
+name: big-bear-gem_digest_bot
 
 # Service definitions for the gem-digest-bot application
 services:
@@ -9,7 +9,7 @@ services:
   # The `bot` service definition
   bot:
     # Name of the container
-    container_name: gem_digest_bot
+    container_name: big-bear-gem_digest_bot
 
     # Docker image to use
     image: piero24/gemdigest:latest
@@ -57,30 +57,41 @@ x-casaos:
   architectures:
     - amd64
     - arm64
+
   # Main service of the application
-  main: bot
+  main: big-bear-gem_digest_bot
+
   description:
     # Description in English
-    en_us: GemDigest bot summarizes articles from web links you share, helping you get quick insights without reading long articles.
+    en_us: Simplify your reads, amplify your time! 📚✨ GemDigest is a Telegram bot that summarizes articles from any website into bite-sized nuggets, saving you time and energy for what matters most. 📱👋
+  
   tagline:
     # Short description or tagline in English
     en_us: Your personal article summarizer
+  
   # Developer's name or identifier
-  developer: "BigBearTechWorld"
+  developer: "Armaggheddon"
+  
   # Author of this configuration
-  author: BigBearTechWorld
+  author: BigBearCommunity
+
+  # Application category
+  category: BigBearCasaOS
+  
   # Icon for the application
   icon: https://raw.githubusercontent.com/Piero24/GemDigest/refs/heads/main/.github/images/casOS_logo.png
+  
   # Thumbnail image (currently empty)
   thumbnail: ""
+  
   title:
     # Title in English
     en_us: GemDigest Bot
+  
   tips:
     custom: Add you `TELEGRAM-API-KEY` and `GEMINI-API-KEY` in settings and the
       users `ID` that are considered as admin separated by a ";" if thereare
       more then one. for more info visit [GemDigest](https://github.com/Armaggheddon/GemDigest)
-  # Application category
-  category: BigBearCasaOS
+  
   # Port mapping information
   port_map: "3333"
