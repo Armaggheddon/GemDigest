@@ -223,18 +223,18 @@
 3. Build the container
 
     ```bash
-    docker compose -f docker-compose.yml build
+    docker compose build
     ```
 
 4. Start the container
 
     ```bash
-    docker compose -f docker-compose.yml up -d
+    docker compose up -d
     ```
 
 5. **(OPTIONAL)** Add blacklist for websites to crawl by editing the file in [`extra_configs/website_blacklist.txt`](../extra_configs/website_blacklist.txt). Then restart the compose with the following command:
     ```bash
-    docker compose -f docker-compose restart
+    docker compose restart
     ```
 
 <h3> <img src="https://storage.yandexcloud.net/products/f2e3n595vqa179mqavo0.svg" width="18"> CasaOS </h3>
