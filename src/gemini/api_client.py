@@ -89,7 +89,7 @@ class GeminiAPIClient():
             response_mime_type="application/json",
         )
 
-        model_name = "gemini-1.5-flash-001"
+        model_name = "gemini-1.5-flash-002"
 
         self.model_info = GeminiModelInfo(
             model_name=model_name,
